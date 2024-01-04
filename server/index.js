@@ -10,6 +10,9 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
+// connecting database
+const pool = require('./db');
+
 var adminIndexRouter = require('./router/adminIndexRouter');
 var usersRouter = require('./router/indexRouter');
 
