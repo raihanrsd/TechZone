@@ -40,14 +40,14 @@ CREATE TABLE delivery_man (
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
     product_name VARCHAR(200) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL CHECK (product_price >= 0),
-    previous_price DECIMAL(10, 2) NOT NULL CHECK (product_previous_price >= 0),
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
+    previous_price DECIMAL(10, 2) NOT NULL CHECK (previous_price >= 0),
     product_description TEXT,
     product_exerpt TEXT,
     product_img TEXT,
     category_id INTEGER NOT NULL,
     discount_status BOOLEAN NOT NULL,
-    discount DECIMAL(2, 1) NOT NULL CHECK (product_discount >= 0 AND product_discount <= 100),
+    discount DECIMAL(2, 1) NOT NULL CHECK (discount >= 0 AND discount <= 100),
     product_status VARCHAR(20) NOT NULL,
     visibility_status BOOLEAN NOT NULL,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -72,12 +72,12 @@ CREATE TABLE order_product (
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity >= 1),
     CONSTRAINT order_product_pkey PRIMARY KEY (order_id, product_id),
-    FOREIGN KEY (order_id) REFERENCES order(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
 
 
-CREATE TABLE order (
+CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -87,8 +87,8 @@ CREATE TABLE order (
     promo_name VARCHAR(200),
     delivery_charge DECIMAL(10, 2) NOT NULL CHECK (delivery_charge >= 0),
     transaction_id VARCHAR(200), -- For payment gateway
+    address_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,
     FOREIGN KEY (address_id) REFERENCES shipping_address(address_id) ON DELETE NO ACTION,
     FOREIGN KEY (promo_name) REFERENCES promo(promo_name) ON DELETE NO ACTION
 );
@@ -103,7 +103,7 @@ CREATE TABLE shipping_address (
     zip_code VARCHAR(200) NOT NULL,
     country VARCHAR(200) NOT NULL,
     visibility_status BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
 
 
@@ -115,7 +115,7 @@ CREATE TABLE tracker(
     tracker_description TEXT NOT NULL,
     progress INTEGER NOT NULL CHECK (progress >= 0 AND progress <= 100),
     estimated_delivery_date DATE NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES order(order_id) ON DELETE CASCADE
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
 
 
@@ -143,7 +143,7 @@ CREATE TABLE product_category(
     category_name VARCHAR(200) NOT NULL,
     category_description TEXT,
     category_img TEXT,
-    visibility_status BOOLEAN NOT NULL DEFAULT TRUE
+    visibility_status BOOLEAN NOT NULL DEFAULT TRUE,
     parent_category_id INTEGER,
     FOREIGN KEY (parent_category_id) REFERENCES product_category(category_id) ON DELETE CASCADE
 );
@@ -205,7 +205,7 @@ CREATE TABLE notice_board(
 CREATE TABLE order_delivery_man(
     user_id INTEGER NOT NULL,
     order_id INTEGER NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES order(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES delivery_man(user_id) ON DELETE CASCADE
 );
 
