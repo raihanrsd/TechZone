@@ -3,7 +3,7 @@
 
 
 const express = require('express');
-
+require('dotenv').config();
 const app = express();
 
 const morgan = require('morgan');
@@ -17,7 +17,7 @@ var adminIndexRouter = require('./router/adminIndexRouter');
 var usersRouter = require('./router/indexRouter');
 
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 const cors = require('cors');
 
@@ -27,8 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(morgan('dev'));
-app.use('/', adminIndexRouter);
-app.use('/users', usersRouter);
+app.use('/admin', adminIndexRouter);
+app.use('/', usersRouter);
+app.use('/auth', require('./router/jwtAuth'));
 app.set('view engine', 'jade');
 
 app.listen(port, () => {

@@ -2,7 +2,7 @@
 CREATE DATABASE TECHZONE;
 
 CREATE TABLE general_user (
-    user_id SERIAL PRIMARY KEY,
+    user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     username VARCHAR(200) UNIQUE NOT NULL,
     email VARCHAR(200) UNIQUE NOT NULL,
     password TEXT NOT NULL,
@@ -16,19 +16,19 @@ CREATE TABLE general_user (
 
 
 CREATE TABLE customer (
-    user_id SERIAL PRIMARY KEY,
+    user_id uuid PRIMARY KEY,
     points INTEGER NOT NULL CHECK (points >= 0),
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE admin (
-    user_id SERIAL PRIMARY KEY,
+    user_id uuid PRIMARY KEY,
     clearance_level VARCHAR(50) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE delivery_man (
-    user_id SERIAL PRIMARY KEY,
+    user_id uuid PRIMARY KEY,
     hiring_date DATE NOT NULL DEFAULT CURRENT_DATE,
     salary DECIMAL(10, 2) NOT NULL CHECK (salary >= 0),
     total_orders INTEGER NOT NULL DEFAULT 0,
@@ -36,6 +36,15 @@ CREATE TABLE delivery_man (
 );
 
 
+CREATE TABLE product_category(
+    category_id SERIAL PRIMARY KEY,
+    category_name VARCHAR(200) NOT NULL,
+    category_description TEXT,
+    category_img TEXT,
+    visibility_status BOOLEAN NOT NULL DEFAULT TRUE,
+    parent_category_id INTEGER,
+    FOREIGN KEY (parent_category_id) REFERENCES product_category(category_id) ON DELETE CASCADE
+);
 
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
@@ -57,7 +66,7 @@ CREATE TABLE product (
 
 CREATE TABLE product_review (
     review_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
     product_id INTEGER NOT NULL,
     review TEXT NOT NULL,
     rating INTEGER NOT NULL CHECK (rating >= 0 AND rating <= 5),
@@ -67,19 +76,22 @@ CREATE TABLE product_review (
 );
 
 
-CREATE TABLE order_product (
-    order_id INTEGER NOT NULL,
-    product_id INTEGER NOT NULL,
-    quantity INTEGER NOT NULL CHECK (quantity >= 1),
-    CONSTRAINT order_product_pkey PRIMARY KEY (order_id, product_id),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+CREATE TABLE shipping_address (
+    address_id SERIAL PRIMARY KEY,
+    user_id uuid NOT NULL,
+    _address TEXT NOT NULL,
+    city VARCHAR(200) NOT NULL,
+    shipping_state VARCHAR(200) NOT NULL,
+    zip_code VARCHAR(200) NOT NULL,
+    country VARCHAR(200) NOT NULL,
+    visibility_status BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
 
 
 CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
     payment_status BOOLEAN NOT NULL, -- we might add dues system later
     payment_method VARCHAR(200) NOT NULL,
@@ -94,17 +106,16 @@ CREATE TABLE orders(
 );
 
 
-CREATE TABLE shipping_address (
-    address_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    _address TEXT NOT NULL,
-    city VARCHAR(200) NOT NULL,
-    shipping_state VARCHAR(200) NOT NULL,
-    zip_code VARCHAR(200) NOT NULL,
-    country VARCHAR(200) NOT NULL,
-    visibility_status BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
+CREATE TABLE order_product (
+    order_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL CHECK (quantity >= 1),
+    CONSTRAINT order_product_pkey PRIMARY KEY (order_id, product_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
+
+
 
 
 -- we will handle the cart in the frontend
@@ -120,7 +131,7 @@ CREATE TABLE tracker(
 
 
 CREATE TABLE wishlist (
-    user_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
     product_id INTEGER NOT NULL,
     CONSTRAINT wishlist_pkey PRIMARY KEY (user_id, product_id),
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE,
@@ -135,17 +146,6 @@ CREATE TABLE promo(
     promo_status VARCHAR(200) NOT NULL,
     promo_start_date DATE NOT NULL DEFAULT CURRENT_DATE,
     promo_end_date DATE NOT NULL
-);
-
-
-CREATE TABLE product_category(
-    category_id SERIAL PRIMARY KEY,
-    category_name VARCHAR(200) NOT NULL,
-    category_description TEXT,
-    category_img TEXT,
-    visibility_status BOOLEAN NOT NULL DEFAULT TRUE,
-    parent_category_id INTEGER,
-    FOREIGN KEY (parent_category_id) REFERENCES product_category(category_id) ON DELETE CASCADE
 );
 
 
@@ -165,7 +165,7 @@ CREATE TABLE product_attribute(
 
 CREATE TABLE contact_us(
     contact_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
     contact_description TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
@@ -173,8 +173,8 @@ CREATE TABLE contact_us(
 
 CREATE TABLE messages(
     message_id SERIAL PRIMARY KEY,
-    sender_id INTEGER NOT NULL,
-    receiver_id INTEGER NOT NULL,
+    sender_id uuid NOT NULL,
+    receiver_id uuid NOT NULL,
     _message TEXT NOT NULL,
     seen_status BOOLEAN NOT NULL DEFAULT FALSE,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -185,7 +185,7 @@ CREATE TABLE messages(
 
 CREATE TABLE notification(
     notification_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
     notification_description TEXT NOT NULL,
     seen_status BOOLEAN NOT NULL DEFAULT FALSE,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -203,12 +203,51 @@ CREATE TABLE notice_board(
 
 
 CREATE TABLE order_delivery_man(
-    user_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
     order_id INTEGER NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES delivery_man(user_id) ON DELETE CASCADE
 );
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 
+-- Step 1: Add a new UUID column
+ALTER TABLE general_user
+ADD COLUMN user_uuid UUID DEFAULT uuid_generate_v4() UNIQUE;
+
+-- Step 2: Update existing rows with UUID values
+UPDATE general_user
+SET user_uuid = uuid_generate_v4();
+
+-- Step 3: Drop the old SERIAL column
+ALTER TABLE general_user
+DROP COLUMN user_id;
+
+-- Step 4: Rename the new UUID column to match the old name
+ALTER TABLE general_user
+RENAME COLUMN user_uuid TO user_id;
+
+
+
+
+DROP TABLE general_user CASCADE;
+DROP TABLE admin CASCADE;
+DROP TABLE customer CASCADE;
+DROP TABLE delivery_man CASCADE;
+DROP TABLE product CASCADE;
+DROP TABLE product_review CASCADE;
+DROP TABLE order_product CASCADE;
+DROP TABLE orders CASCADE;
+DROP TABLE shipping_address CASCADE;
+DROP TABLE tracker CASCADE;
+DROP TABLE wishlist CASCADE;
+DROP TABLE promo CASCADE;
+DROP TABLE product_category CASCADE;
+DROP TABLE product_attribute CASCADE;
+DROP TABLE contact_us CASCADE;
+DROP TABLE messages CASCADE;
+DROP TABLE notification CASCADE;
+DROP TABLE notice_board CASCADE;
+DROP TABLE order_delivery_man CASCADE;
 
