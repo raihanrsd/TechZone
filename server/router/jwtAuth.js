@@ -24,9 +24,6 @@ router.post('/register', validInfo, async (req, res) => {
         }
         // res.json(user.rows[0]);
 
-        
-
-
         // 3. bcrypt the user password
 
         const saltRound = 10;
@@ -101,5 +98,7 @@ router.get('/is-verify', authorization, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+
 
 module.exports = router;

@@ -251,3 +251,18 @@ DROP TABLE notification CASCADE;
 DROP TABLE notice_board CASCADE;
 DROP TABLE order_delivery_man CASCADE;
 
+
+
+-- adding unique contraint with category name
+ALTER TABLE product_category
+ADD UNIQUE (category_name);
+
+
+
+-- adding another column to product_attribute
+ALTER TABLE product_attribute
+ADD COLUMN base_spec BOOLEAN NOT NULL DEFAULT FALSE;
+
+-- modifying discount
+ALTER TABLE product
+ALTER COLUMN discount TYPE DECIMAL(3, 1);
