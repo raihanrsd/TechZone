@@ -266,3 +266,6 @@ ADD COLUMN base_spec BOOLEAN NOT NULL DEFAULT FALSE;
 -- modifying discount
 ALTER TABLE product
 ALTER COLUMN discount TYPE DECIMAL(3, 1);
+
+
+

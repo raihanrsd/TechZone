@@ -23,6 +23,8 @@ router.get('/', authorization, async(req, res, next) => {
   }
 });
 
+router.use('/shop', require('./Products/shop_page'));
 
+router.use('/categories', require('./Products/all_categories'));
 
 module.exports = router;
