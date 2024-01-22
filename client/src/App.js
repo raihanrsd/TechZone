@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
+import Home from './components/Home';
 
 
 
@@ -48,7 +49,8 @@ function App() {
           <Route exact path="/login" element={!isAuthenticated?  <Login setAuth={setAuth} /> : <Navigate to ="/dashboard" />} />
           <Route exact path="/register" element={!isAuthenticated?  <Register setAuth={setAuth} /> : <Navigate to ="/dashboard" />} />
           <Route exact path="/dashboard" element={isAuthenticated?  <Dashboard setAuth={setAuth} /> : <Navigate to ="/login" />} />
-          <Route exact path="/" Redirect to="/login" />
+          <Route path="/" element={<Navigate to="/Home" />} />
+          {/* <Route exact path="/" Redirect to="/login" /> */}
         </Routes>
         </div>
       </Router>
