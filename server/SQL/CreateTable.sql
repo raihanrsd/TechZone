@@ -14,7 +14,6 @@ CREATE TABLE general_user (
 );
 
 
-
 CREATE TABLE customer (
     user_id uuid PRIMARY KEY,
     points INTEGER NOT NULL CHECK (points >= 0),
