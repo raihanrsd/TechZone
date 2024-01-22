@@ -34,7 +34,7 @@ const product_add = router.post("/product", async (req, res, next) => {
             parseFloat(previous_price),
             product_description,
             product_exerpt,
-            category_id,
+            parseInt(category_id),
             product_img,
             Boolean(visibility_status),
             Boolean(discount_status),
@@ -50,9 +50,9 @@ const product_add = router.post("/product", async (req, res, next) => {
                 newProduct.rows[0].id,
                 spec.attribute_name,
                 spec._value,
-                spec.price_increase,
-                spec.stock,
-                spec.sold,
+                parseFloat(spec.price_increase),
+                parseInt(spec.stock),
+                parseInt(spec.sold),
                 Boolean(spec.base_spec)
             ]);
             allSpec.push(insert_spec.rows[0]);
@@ -62,7 +62,8 @@ const product_add = router.post("/product", async (req, res, next) => {
         res.json({
             message: 'Product added successfully',
             newProduct: newProduct.rows[0],
-            allSpec: allSpec
+            allSpec: allSpec,
+            addStatus: true
         });
 
     }
@@ -130,6 +131,7 @@ const category_add = router.post("/category", async (req, res, next) => {
     res.json({
       message: "Category added successfully",
       newCategory: newCategory.rows[0],
+      addStatus: true,
     });
   } catch (err) {
     console.error(err.message);

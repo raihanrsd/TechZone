@@ -6,11 +6,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './components/Authentication/Login';
+import Register from './components/Authentication/Register';
 import Dashboard from './components/Dashboard';
 import Home from './components/Home';
 
+import Navbar from './components/Navbar';
+import AddPage from './components/Admin/AddPage';
 
 
 function App() {
@@ -41,6 +43,7 @@ function App() {
   }, []);
 
   return (
+
     <Fragment>
       <ToastContainer />
       <Router>
@@ -49,8 +52,8 @@ function App() {
           <Route exact path="/login" element={!isAuthenticated?  <Login setAuth={setAuth} /> : <Navigate to ="/dashboard" />} />
           <Route exact path="/register" element={!isAuthenticated?  <Register setAuth={setAuth} /> : <Navigate to ="/dashboard" />} />
           <Route exact path="/dashboard" element={isAuthenticated?  <Dashboard setAuth={setAuth} /> : <Navigate to ="/login" />} />
-          <Route exact path="/home" element={<Home />} />
-          <Route exact path="/" Redirect to="/login" />
+          <Route exact path="/" element={<Navigate to="/login"/>} />
+          <Route exact path="/admin" element={<AddPage />}/>
         </Routes>
         </div>
       </Router>
