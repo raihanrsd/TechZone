@@ -47,15 +47,14 @@ function App() {
     <Fragment>
       <ToastContainer />
       <Router>
-        <div className="container">
         <Routes>
           <Route exact path="/login" element={!isAuthenticated?  <Login setAuth={setAuth} /> : <Navigate to ="/dashboard" />} />
           <Route exact path="/register" element={!isAuthenticated?  <Register setAuth={setAuth} /> : <Navigate to ="/dashboard" />} />
           <Route exact path="/dashboard" element={isAuthenticated?  <Dashboard setAuth={setAuth} /> : <Navigate to ="/login" />} />
-          <Route exact path="/" element={<Navigate to="/login"/>} />
+          {/* <Route exact path="/" element={<Navigate to="/login"/>} /> */}
           <Route exact path="/admin" element={<AddPage />}/>
+          <Route exact path="/" element={<Home />}/>
         </Routes>
-        </div>
       </Router>
     </Fragment>
   );

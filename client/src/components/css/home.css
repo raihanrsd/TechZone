@@ -1,15 +1,13 @@
 * {
 	font-family: 'Montserrat', sans-serif;
 }
-/* .padding_zero{
-  padding: 0;
-}
-body{
-  padding: 0;
-} */
 .bg-light {
 	background-color: transparent !important;
 }
+.dark-shadow {
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* Adjust values for the shadow effect */
+	filter: brightness(70%); /* Adjust the brightness percentage */
+}  
 .carousel-item {
 	height: 100vh;
 	min-height: 300px;
@@ -37,7 +35,11 @@ body{
 	display: inline-block;
 	color: #fff;
 	margin-top: 15px;
-  border: 1px solid #fff;
+  	border: 1px solid #fff;
+}
+.carousel-caption a:hover {
+	background: #fff;
+	color: #333;
 }
 .navbar-nav a {
 	font-size: 18px;
