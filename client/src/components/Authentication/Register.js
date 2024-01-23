@@ -71,31 +71,31 @@ const Register = ({setAuth}) => {
                     </div>
 
                     <div class="input-group mb-3">
-                        <input type="text" name="username" placeholder="Username" className="form-control form-control-lg bg-light fs-6" value={username} onChange={e => onChange(e)} />
+                        <input type="text" name="username" placeholder="Username" className="form-control form-control-lg bg-color fs-6" value={username} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                        <input type="email" name="email" placeholder="Email" className="form-control form-control-lg bg-light fs-6" value={email} onChange={e => onChange(e)} />
+                        <input type="email" name="email" placeholder="Email" className="form-control form-control-lg bg-color fs-6" value={email} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" name="password" placeholder="Password" className="form-control form-control-lg bg-light fs-6" value={password} onChange={e => onChange(e)} />
+                        <input type="password" name="password" placeholder="Password" className="form-control form-control-lg bg-color fs-6" value={password} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" name="confirmed_password" placeholder="Confirmed Password" className="form-control form-control-lg bg-light fs-6" value={confirmed_password} onChange={e => onChange(e)} />
+                        <input type="password" name="confirmed_password" placeholder="Confirmed Password" className="form-control form-control-lg bg-color fs-6" value={confirmed_password} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                        <input type="text" name="contact_no" placeholder="Contact No." className="form-control form-control-lg bg-light fs-6" value={contact_no} onChange={e => onChange(e)} />
+                        <input type="text" name="contact_no" placeholder="Contact No." className="form-control form-control-lg bg-color fs-6" value={contact_no} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                        <input type="text" name="profile_img" placeholder="Profile Image" className="form-control form-control-lg bg-light fs-6" value={profile_img} onChange={e => onChange(e)} />
+                        <input type="text" name="profile_img" placeholder="Profile Image" className="form-control form-control-lg bg-color fs-6" value={profile_img} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                    <input type="text" name="full_name" placeholder="Full Name"className="form-control form-control-lg bg-light fs-6" value={full_name} onChange={e => onChange(e)} />
+                    <input type="text" name="full_name" placeholder="Full Name"className="form-control form-control-lg bg-color fs-6" value={full_name} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                    <input type="text" name="gender" placeholder="Gender" className="form-control form-control-lg bg-light fs-6" value={gender} onChange={e => onChange(e)} />
+                    <input type="text" name="gender" placeholder="Gender" className="form-control form-control-lg bg-color fs-6" value={gender} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
-                    <input type="text" name="staff_status" placeholder="Staff Status" className="form-control form-control-lg bg-light fs-6" value={staff_status} onChange={e => onChange(e)} />
+                    <input type="text" name="staff_status" placeholder="Staff Status" className="form-control form-control-lg bg-color fs-6" value={staff_status} onChange={e => onChange(e)} />
                     </div>
 
                     <div class="input-group mb-3">
@@ -123,31 +123,3 @@ const Register = ({setAuth}) => {
 }
 
 export default Register;
-
-
-
-
-
-
-
-
-
-
-
-
-
-// previous code
-{/* <h1 className='text-center m-5'>Register</h1>
-<form onSubmit={onSubmitForm}>
-    <input type="text" name="username" placeholder="Username" className="form-control my-3" value={username} onChange={e => onChange(e)} />
-    <input type="email" name="email" placeholder="Email" className="form-control my-3" value={email} onChange={e => onChange(e)} />
-    <input type="password" name="password" placeholder="Password" className="form-control my-3" value={password} onChange={e => onChange(e)} />
-    <input type="password" name="confirmed_password" placeholder="Confirmed Password" className="form-control my-3" value={confirmed_password} onChange={e => onChange(e)} />
-    <input type="text" name="contact_no" placeholder="Contact No." className="form-control my-3" value={contact_no} onChange={e => onChange(e)} />
-    <input type="text" name="profile_img" placeholder="Profile Image" className="form-control my-3" value={profile_img} onChange={e => onChange(e)} />
-    <input type="text" name="full_name" placeholder="Full Name" className="form-control my-3" value={full_name} onChange={e => onChange(e)} />
-    <input type="text" name="gender" placeholder="Gender" className="form-control my-3" value={gender} onChange={e => onChange(e)} />
-    <input type="text" name="staff_status" placeholder="Staff Status" className="form-control my-3" value={staff_status} onChange={e => onChange(e)} />
-    <button className="btn btn-success btn-block">Submit</button>
-</form>
-<p className="m-3 text-center"> If you already have an account <Link to="/login">Login here</Link>.</p> */}

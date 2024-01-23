@@ -15,7 +15,10 @@ export default function ProductSlider(props) {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 2000,
-        pauseOnHover: true
+        pauseOnHover: true,
+        initialSlide: 0,
+        
+        // need further checking [responsive]
     };
 
     return(

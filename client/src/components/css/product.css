@@ -16,3 +16,9 @@
     padding: 20px;
     height: 600px;
 }
+.slick-dots{
+    padding: 40px !important;
+}
+.slick-prev:before, .slick-next:before {
+   color: black !important;
+}

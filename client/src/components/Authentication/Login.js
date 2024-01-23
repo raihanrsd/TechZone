@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import "../css/login.css";
 import logo from "../../image/login.png";
+import bg from "../../image/bg.png";
 import googleLogo from "../../image/google.png";
 
 const Login = ({setAuth}) => {
@@ -56,9 +57,8 @@ const Login = ({setAuth}) => {
         <Fragment>
             
 
-            <div class="container d-flex justify-content-center align-items-center min-vh-100">
-
-           
+            <div class="container d-flex justify-content-center align-items-center min-vh-100" >
+            
 
             <div class="row border rounded-5 p-3 bg-white shadow box-area">
 
@@ -81,10 +81,10 @@ const Login = ({setAuth}) => {
                             <p>Lets Start Grinding</p>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="email" name="email" placeholder="Email Adress" className="form-control form-control-lg bg-light fs-6" value={email} onChange={e => onChange(e)} />
+                        <input type="email" name="email" placeholder="Email Adress" className="form-control form-control-lg bg-color fs-6" value={email} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-1">
-                        <input type="password" name="password" placeholder="Password" className="form-control form-control-lg bg-light fs-6" value={password} onChange={e => onChange(e)} />
+                        <input type="password" name="password" placeholder="Password" className="form-control form-control-lg bg-color fs-6" value={password} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-5 d-flex justify-content-between">
                         <div class="form-check">

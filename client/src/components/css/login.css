@@ -6,6 +6,16 @@ body{
     font-family: 'Poppins', sans-serif;
     background: #ececec;
 }
+.bg-color{
+    background: white;
+}
+/*
+.bg-image{
+    background-image: url('../../images/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+} */
 
 /*------------ Login container ------------*/
 

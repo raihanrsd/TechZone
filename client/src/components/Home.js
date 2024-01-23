@@ -7,7 +7,6 @@ import "./css/home.css";
 import laptop from "../image/laptop.png";
 import products from "./Products/data";
 
-import ProductCard from "./Products/productCard";
 import ProductSlider from "./Products/productSlider";
 
 export default function Home() {
@@ -18,6 +17,7 @@ export default function Home() {
         {/* Navigation Bar */}
       	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
           <div class="container">
+            <i class="fa-brands fa-slack fa-2x" style={{color: "white", padding: "10px"}}></i>
             <div class="navbar-brand">TechZone</div>
             <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
@@ -31,12 +31,14 @@ export default function Home() {
                   <Link to="/register" className="nav-link">Sign Up</Link>
                 </li>
                 <li class="nav-item">
-                  <Link to="/products" className="nav-link">Products</Link>
+                  <Link to="/techProducts" className="nav-link">Products</Link>
                 </li>
               </ul>
             </div>
           </div>
 	      </nav>
+
+
 
         {/* image slider */}
         <div class="carousel slide" data-bs-ride="carousel" id="carouselExampleIndicators">
@@ -73,6 +75,8 @@ export default function Home() {
           </div><button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleIndicators" type="button"><span aria-hidden="true" class="carousel-control-prev-icon"></span> <span class="visually-hidden">Previous</span></button> <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleIndicators" type="button"><span aria-hidden="true" class="carousel-control-next-icon"></span> <span class="visually-hidden">Next</span></button>
         </div>
 
+
+
         {/* Product Categories */}
         <section class="container">
 
@@ -94,9 +98,42 @@ export default function Home() {
           <h5 class="display-6 font-weight-bold pt-5 pb-3"> HeadGear : </h5>
           <div class="row"> <ProductSlider item = {products}/> </div>
         </div>
-
         </section>
 
+
+
+        {/* Footer --> subject to change */}
+        <footer className="bg-dark text-light p-4">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-4">
+                <h5>About Us</h5>
+                <p>Learn more about our company and mission.</p>
+              </div>
+              <div className="col-md-4 offset-md-4 text-md-end">
+                <h5>Contact Us</h5>
+                <p>Email: info@example.com</p>
+                <p>Phone: +1 (555) 123-4567</p>
+              </div>
+            </div>
+            <hr className="my-4" />
+            <div className="row">
+              <div className="col text-center">
+                <p>&copy; 2024 Your Company. All rights reserved.</p>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-md-6 text-md-start">
+                <p>Name: Abhishek Roy</p>
+                <p>ID: 2105033</p>
+              </div>
+              <div className="col-md-6 text-md-end">
+                <p>Name: Raihan Rashid</p>
+                <p>ID: 2105046</p>
+              </div>
+            </div>
+          </div>
+        </footer> 
     </Fragment>
   );
 }

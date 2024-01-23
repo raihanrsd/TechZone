@@ -13,6 +13,7 @@ import Home from './components/Home';
 
 import Navbar from './components/Navbar';
 import AddPage from './components/Admin/AddPage';
+import TechProduct from './components/TechProduct';
 
 
 function App() {
@@ -53,6 +54,9 @@ function App() {
           <Route exact path="/dashboard" element={isAuthenticated?  <Dashboard setAuth={setAuth} /> : <Navigate to ="/login" />} />
           {/* <Route exact path="/" element={<Navigate to="/login"/>} /> */}
           <Route exact path="/admin" element={<AddPage />}/>
+
+          <Route exact path="/techProducts" element={<TechProduct />}/>        
+
           <Route exact path="/" element={<Home />}/>
         </Routes>
       </Router>

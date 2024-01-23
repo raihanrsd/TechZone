@@ -2,7 +2,7 @@
 	font-family: 'Montserrat', sans-serif;
 }
 .bg-light {
-	background-color: transparent !important;
+	background-color: black !important;
 }
 .dark-shadow {
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* Adjust values for the shadow effect */
