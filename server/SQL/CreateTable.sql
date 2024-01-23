@@ -151,14 +151,15 @@ CREATE TABLE promo(
 
 
 CREATE TABLE product_attribute(
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     product_id INTEGER NOT NULL,
     attribute_name VARCHAR(200) NOT NULL,
     _value VARCHAR(200) NOT NULL,
     price_increase DECIMAL(10, 2) NOT NULL CHECK (price_increase >= 0),
     stock INTEGER NOT NULL CHECK (stock >= 0),
     sold INTEGER NOT NULL CHECK (sold >= 0),
-    CONSTRAINT product_attribute_pkey PRIMARY KEY (product_id, attribute_name, _value),
-    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,
+    CONSTRAINT unique_product_attribute UNIQUE (product_id, attribute_name, _value)
 );
 
 
@@ -268,4 +269,10 @@ ALTER TABLE product
 ALTER COLUMN discount TYPE DECIMAL(3, 1);
 
 
+CREATE TABLE product_image(
+    image_id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    image_url TEXT NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+);
 

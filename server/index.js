@@ -5,25 +5,6 @@
 const express = require('express');
 require('dotenv').config();
 const app = express();
-const multer = require('multer');
-
-const upload = multer({ storage: multer.memoryStorage() });
-
-const firebase = require("firebase/app");
-const {getStorage, ref, uploadBytes} = require('firebase/storage')
-const firebaseConfig = {
-    apiKey: process.env.apiKey,
-    authDomain: process.env.authDomain,
-    projectId: process.env.projectId,
-    storageBucket: process.env.storageBucket,
-    messagingSenderId: process.env.senderId,
-    appId: process.env.appId,
-    measurementId: process.env.measurementId
-  };
-
-
-firebase.initializeApp(firebaseConfig);
-const storage = getStorage();
 
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -37,16 +18,19 @@ var usersRouter = require('./router/indexRouter');
 const authorization = require('./middlewares/authorization');
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 const cors = require('cors');
 
 
-
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 
 app.use(cors());
 app.use(express.json());
+app.use('/images/products', express.static(path.join(__dirname, 'public/images/products')));
 // app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
@@ -55,14 +39,32 @@ app.use('/admin', adminIndexRouter);
 app.use('/', usersRouter);
 app.use('/auth', require('./router/jwtAuth'));
 
-app.post('/upload', upload.single('filename'), (req, res) => {
-    const storageRef = ref(storage, `files/${req.file.originalname}`);
-    console.log(req.file);
-    uploadBytes(storageRef, req.file.buffer).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
-        res.send('Uploaded a blob or file!');
-    });
-});
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      // Specify the destination folder for uploads
+      const uploadPath = path.join(__dirname, 'public', 'images', 'products');
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+      cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+      // Generate a unique filename for each uploaded file
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
+    },
+  });
+
+  const upload = multer({ storage: storage });
+
+  app.post('/upload/:name', upload.array('images'), (req, res) => {
+    // Access uploaded files via req.files
+    const imageUrls = req.files.map((file) => `/images/${req.params.name}/${file.filename}`);
+    console.log("comes here");
+    console.log(imageUrls);
+    // Respond with the generated image URLs
+    res.json({ imageUrls });
+  });
 
 
 app.listen(port, () => {
