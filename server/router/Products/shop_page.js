@@ -6,7 +6,7 @@ const authorization = require('../../middlewares/authorization');
 
 router.get('/', async(req, res, next) => {
     try{
-        const all_products = await pool.query('SELECT *, (SELECT category_name FROM product_category WHERE category_id = PR.category_id ) AS "category_name" FROM product PR;');
+        const all_products = await pool.query('SELECT *, (SELECT category_name FROM product_category WHERE category_id = PR.category_id ) AS "category_name" FROM product PR ORDER BY PR.id;');
         await Promise.all(
             all_products.rows.map(async (product) => {
                 product.price = parseFloat(product.price);
@@ -17,6 +17,15 @@ router.get('/', async(req, res, next) => {
                 return product;
             })
         );
+
+        await Promise.all(
+            all_products.rows.map(async (product) => {
+                const images_query = await pool.query('SELECT * FROM product_image WHERE product_id = $1;', [product.id]);
+                product.images = images_query.rows;
+                return product;
+            })
+        );
+        
         res.json(all_products.rows);
         next();
     }
