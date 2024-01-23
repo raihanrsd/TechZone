@@ -18,9 +18,10 @@ const Login = ({setAuth}) => {
 
     const onSubmitForm = async e => {
         e.preventDefault();
+        console.log(process.env.REACT_APP_SERVER_PORT)
         try {
             const body = {email, password};
-            const response = await fetch("http://localhost:5000/auth/login", {
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/login`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(body)

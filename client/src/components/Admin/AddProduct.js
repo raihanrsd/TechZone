@@ -22,13 +22,20 @@ const AddProducts = () =>{
         specs: [],
       });
 
+      const [selectedImages, setSelectedImages] = useState([]);
+
+      const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedImages(files);
+      };
+
       const [allCategories, setAllCategories] = useState([]);
 
         // Fetch categories when component mounts
         useEffect(() => {
             const fetchCategories = async () => {
                 try {
-                const response = await fetch('http://localhost:5000/categories');
+                const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/categories`);
                 const categories = await response.json();
                 setAllCategories(categories);
                 } catch (error) {
@@ -56,7 +63,7 @@ const AddProducts = () =>{
         e.preventDefault();
         try {
             const body = {product_name, price, previous_price, product_description, product_exerpt, category_id, product_img, visibility_status, discount_status, discount, product_status, specs};
-            const response = await fetch("http://localhost:5000/admin/add/product", {
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/admin/add/product`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(body)
@@ -117,7 +124,7 @@ const AddProducts = () =>{
         <Fragment>
             <div className="container m-5">
 
-            </div>
+            
             <h1 className="text-center m-5">Add Products</h1>
             <form onSubmit={onSubmitForm}>
                 <input type="text" name="product_name" placeholder="Product Name" className="form-control my-3" value={product_name} onChange={e => onChange(e)} />
@@ -216,6 +223,7 @@ const AddProducts = () =>{
 
                 <button className="btn btn-success btn-block">Submit</button>
             </form>
+            </div>
         </Fragment>
     );
 }

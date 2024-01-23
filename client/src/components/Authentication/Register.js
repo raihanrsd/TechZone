@@ -26,8 +26,9 @@ const Register = ({setAuth}) => {
             if (password !== confirmed_password) {
                 alert("Passwords do not match");
             }
+            
             const body = {username, email, password, contact_no, profile_img, full_name, gender, staff_status};
-            const response = await fetch("http://localhost:5000/auth/register", {
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/register`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(body)

@@ -1,38 +1,61 @@
-.App {
-  text-align: center;
-}
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.App-header {
+.nav_bar{
+  width: 100%;
+  height: 50px;
   background-color: #282c34;
-  min-height: 100vh;
+}
+
+
+.btn_bar{
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+}
+
+/* App.css or component-specific styles */
+.edit-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other elements */
 }
 
-.App-link {
-  color: #61dafb;
+.edit-form-container {
+  background: white;
+  position: relative;
+  padding: 20px;
+  border-radius: 8px;
+  height: 70vh;
+  overflow: scroll;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.edit-form {
+  /* Add additional styling for form elements */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+}
+
+
+.cart-img-div{
+  width: 200px;
+  height: auto;
+  margin: 0 auto;
 }

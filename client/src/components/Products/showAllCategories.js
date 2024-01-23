@@ -9,7 +9,7 @@ const ShowAllCategories = () =>{
     useEffect(() => {
         const getCategories = async () => {
             try {
-                const response = await fetch("http://localhost:5000/categories", {
+                const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/categories`, {
                     method: "GET",
                     headers: { token: localStorage.token }
                 });
@@ -27,7 +27,7 @@ const ShowAllCategories = () =>{
 
     const deleteCategory = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/admin/delete/category/${id}`, {
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/admin/delete/category/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
