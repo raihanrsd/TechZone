@@ -12,8 +12,10 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
     "react-scripts": "^3.0.1",
+    "react-slick": "^0.29.0",
     "react-toastify": "^9.0.0",
     "url": "^0.11.3",
+    "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

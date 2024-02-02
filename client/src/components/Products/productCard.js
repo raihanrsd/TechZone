@@ -1,19 +1,48 @@
 import React, { Fragment, useState, useEffect } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
 
 import "../css/product.css";
 
 export default function ProductCard(props) {
+
+    var settings = {
+        dots: true,
+        infinite: false,
+        slidesToShow: props.item.images.length,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        pauseOnHover: true,
+        initialSlide: 0,
+        
+        // need further checking [responsive]
+    };
     return(
         <div class="card" style={{width: '18rem', padding : 10, borderRadius: 10}}>
-            <img class="card-img-top " src={props.item.img}  alt="Card image"/>
+
+            {/* <Slider {...settings}>
+            {
+
+                props.item.images.map((image) => (
+                    <img class="card-img-top " src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}` + image.image_url}  alt="Card image"/>
+                ))
+            }
+            fix the image problem
+            </Slider> */}
+            
+            
             <div class="card-body">
                 <h6 class="card-title" style={{fontWeight : 700, fontSize : 18}}>{props.item.name}</h6>
 
                 <ul className="specs">
-                <li>Processor: <b>{props.item.processor}</b></li>
-                <li>Ram: <b>{props.item.ram}</b></li>
-                <li>Storage: <b>{props.item.storage}</b></li>
-                <li>Display: <b>{props.item.display}</b></li>
+                {
+                    props.item.specs.map(spec => (
+                        spec.base_spec?<li className="spec">{spec.attribute_name}: {spec._value}</li>: null
+                    ))
+                }
                 </ul>
 
                 <hr/>
