@@ -12,7 +12,9 @@ import Navbar from "./Navbar";
 import ProductSlider from "./Products/productSlider";
 
 export default function Home() {
+  
   const [products, setProducts] = useState([]);
+
   useEffect(() =>{
     const getFeaturedProduct = async() =>{
         try{
