@@ -2,11 +2,12 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import {addToCart, getCart} from '../Cart/cartUtils';
 
 
 
-const ShowProducts = ({products, setProducts}) =>{
+const ShowProducts = ({isAuthenticated, products, setProducts}) =>{
 
     // useEffect(() => {
     //     const getProducts = async () => {
@@ -30,12 +31,77 @@ const ShowProducts = ({products, setProducts}) =>{
     // }, []); 
 
 
-    const addProductToCart = (id) => {
+    const addProductToCart = async (id) => {
         try{
-            addToCart(id, 1);
+            
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/products/cart/${id}`, {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        token: localStorage.token 
+                    }
+                });
+            const parseRes = await response.json();
+
+            const specs = parseRes;
+            // console.log("comes here");
+            addToCart(id, 1, specs);
+            setProducts(products.map(product => {
+                if(product.id === id){
+                    product.wishlist = true;
+                }
+                return product;
+            }))
             toast.success("Product added to cart successfully");
         }
         catch(err){
+            toast.error(err.message);
+        }
+    }
+
+    const addProductToWishlist = async (id) => {
+        try{
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/wishlist/${id}`, {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        token: localStorage.token 
+                    }
+                });
+            const parseRes = await response.json();
+            console.log(parseRes);
+            setProducts(products.map(product => {
+                if(product.id === id){
+                    product.wishlist = true;
+                }
+                return product;
+            }))
+            toast.success("Product added to wishlist successfully");
+        }catch(err){
+            toast.error(err.message);
+        }
+    }
+
+    const removeProductFromWishlist = async (id) => {
+        try{
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/wishlist/${id}`, {
+                    method: "DELETE",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        token: localStorage.token 
+                    }
+                });
+            const parseRes = await response.json();
+            console.log(parseRes);
+
+            setProducts(products.map(product => {
+                if(product.id === id){
+                    product.wishlist = false;
+                }
+                return product;
+            }))
+            toast.success("Product removed from wishlist successfully");
+        }catch(err){
             toast.error(err.message);
         }
     }
@@ -45,9 +111,7 @@ const ShowProducts = ({products, setProducts}) =>{
         <Fragment>
             <h1 className="text-center m-5">Products</h1>
             <div className="container">
-                <div className="row">
-
-                    
+                <div className="row">  
                     {products && products.length > 0 ? (
                     products.map(product => (
                         <div className="col-sm-4" key={product.id}>
@@ -59,19 +123,27 @@ const ShowProducts = ({products, setProducts}) =>{
                                 }
                                 
                                 <div className="card-body">
-                                    <h5 className="card-title">{product.product_name}</h5>
+                                    <Link to={`/product/${product.id}`}><h5 className="card-title">{product.product_name}</h5></Link>
                                     <p className="card-text">Category Name: {product.category_name}</p>
                                     <p className="card-text">Price: {product.price}</p>
                                     <p className="card-text">{product.product_description}</p>
 
                                     {
                                         product.specs.map(spec => (
-                                            <p className="card-text">{spec.attribute_name}: {spec._value}</p>
+                                            <p key={spec.spec_id} className="card-text">{spec.attribute_name}: {spec._value}</p>
                                         ))
                                     }
                                     <div className="btn_bar">
                                         <button className="btn btn-dark" onClick={() => addProductToCart(product.id)}>Add to Cart</button>
-                                        
+
+                                        {
+                                            isAuthenticated ? product.wishlist? (
+                                                <button className="btn btn-danger" onClick={() => removeProductFromWishlist(product.id)}>Remove WishList</button>
+                                            ) : (
+                                                <button className="btn btn-light" onClick={() => addProductToWishlist(product.id)}>Add to Wishlist</button>
+                                            )
+                                            : null
+                                        }
                                     </div>
                                 </div>
                             </div>

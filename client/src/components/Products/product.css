@@ -1,0 +1,84 @@
+
+
+.product-main-div{
+    margin-top: 100px;
+}
+
+
+
+
+/* .slider-image-container {
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    align-items: center;
+    width: 100%;
+    height: 400px; 
+}
+
+.slider-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+} 
+*/
+
+
+.slider-image-container {
+    position: relative;
+    width: 100%;
+    height: 450px; 
+}
+
+.product-info-div{
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+.slider-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%; /* Ensure the image doesn't exceed the container width */
+    max-height: 400px;
+}
+
+.product-div{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.product-description{
+    width: 80%;
+    margin-top: 20px;
+    font-size: 15px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+
+.price-pill{
+    background-color: #f5f6fb;
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 8px 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    width: 200px;
+}
+
+.price-pills{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    width: 700px;
+    overflow-x: scroll;
+}

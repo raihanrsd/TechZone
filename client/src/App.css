@@ -15,6 +15,20 @@
   align-items: center;
 }
 
+.btn_bar button{
+  margin: 0px 20px
+}
+
+.wishlist_btn{
+  background-color: #848484;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
 /* App.css or component-specific styles */
 .edit-form-overlay {
   position: fixed;
@@ -34,9 +48,64 @@
   position: relative;
   padding: 20px;
   border-radius: 8px;
+  min-width: 500px;
   height: 70vh;
   overflow: scroll;
 }
+
+.delete-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  z-index: 1000; /* Ensure it's above other elements */
+}
+
+.delete-form-container {
+  background: rgba(0,0,0,0.5);
+  position: relative;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 300px;
+  height: 200px;
+  overflow: scroll;
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+
+.delete-btn{
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  max-width: 100px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.not-delete-btn{
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  max-width: 100px;
+  width: 100%;
+}
+
+
 
 .edit-form {
   /* Add additional styling for form elements */
@@ -46,6 +115,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  width: 40px;
   background: none;
   border: none;
   font-size: 16px;
@@ -58,4 +128,50 @@
   width: 200px;
   height: auto;
   margin: 0 auto;
+}
+
+
+.tracker-page-overlay {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background-image: url('./image/star1.jpg');
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tracker-page-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 700px;
+  min-height: 300px;
+  transform: translate(-50%, -50%);
+  text-align: center; /* If you want to center text within the container */
+  background-color: white; /* Add a background color for better visibility */
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+  padding: 20px; /* Add padding to the container */
+  border-radius: 15px; /* Optional: Add rounded corners */
+}
+
+.error-page-btn{
+  background-color: #0245d4;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 50px;
+  border: none;
+  border-radius: 25px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  text-decoration: none;
+  width: 100%;
+}
+
+.error-text{
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 50px;
+  color: rgba(0, 0, 0, 0.5)
 }

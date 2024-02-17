@@ -263,7 +263,7 @@ const EditForm = ({ product, onClose, onSubmit }) => {
             <button type="button" className="btn btn-primary" onClick={handleAddSpec}>
                 Add Specification
             </button>
-            <button type="button" className="btn btn-success" >Submit</button>
+            <button type="submit" className="btn btn-success" >Submit</button>
         </div>
         
         
