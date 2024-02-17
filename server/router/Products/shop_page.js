@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../../db');
+const jwt = require("jsonwebtoken");
 const authorization = require('../../middlewares/authorization');
 
 
@@ -25,6 +26,20 @@ router.get('/', async(req, res, next) => {
                 return product;
             })
         );
+
+        // wishlisting for logged in users
+        const jwtToken = req.header("token")
+        if(jwtToken){
+            await Promise.all(
+                all_products.rows.map(async (product) => {
+                    const user_id = jwt.verify(jwtToken, process.env.jwtSecret).user;
+                    const wishlist_query = await pool.query('SELECT COUNT(*) FROM wishlist WHERE user_id = $1 AND product_id = $2;', [user_id, product.id]);
+                    product.wishlist = wishlist_query.rows[0].count > 0 ? true : false;
+                    return product;
+                }
+            ));
+        }
+        
         
         res.json(all_products.rows);
         next();
@@ -34,5 +49,7 @@ router.get('/', async(req, res, next) => {
         res.status(500).send('Server Error');
     }
 });
+
+
 
 module.exports = router;

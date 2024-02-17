@@ -35,9 +35,6 @@ CREATE TABLE delivery_man (
 );
 
 
-
-
-
 CREATE TABLE product_category(
     category_id SERIAL PRIMARY KEY,
     category_name VARCHAR(200) NOT NULL,
@@ -95,21 +92,16 @@ CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
     user_id uuid NOT NULL,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
-    payment_status BOOLEAN NOT NULL DEFAULT FALSE, -- we might add dues system later
+    payment_status BOOLEAN NOT NULL, -- we might add dues system later
     payment_method VARCHAR(200) NOT NULL,
-    order_status VARCHAR(200) NOT NULL DEFAULT 'Pending',
+    order_status VARCHAR(200) NOT NULL,
     promo_name VARCHAR(200),
     delivery_charge DECIMAL(10, 2) NOT NULL CHECK (delivery_charge >= 0),
-    discount_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
-    total_price DECIMAL(10, 2) NOT NULL CHECK (total_price >= 0),
     transaction_id VARCHAR(200), -- For payment gateway
-    _address TEXT DEFAULT '27/2, Kazi Reazuddin Road',
-    city VARCHAR(200) DEFAULT 'Dhaka',
-    shipping_state VARCHAR(200) DEFAULT 'Dhaka',
-    ip_code VARCHAR(200) DEFAULT '1205',
-    country VARCHAR(200) DEFAULT 'Bangladesh';
+    address_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (promo_name) REFERENCES promo(promo_name) ON DELETE SET NULL
+    FOREIGN KEY (address_id) REFERENCES shipping_address(address_id) ON DELETE NO ACTION,
+    FOREIGN KEY (promo_name) REFERENCES promo(promo_name) ON DELETE NO ACTION
 );
 
 
@@ -117,8 +109,6 @@ CREATE TABLE order_product (
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity >= 1),
-    spec_description TEXT,
-    price DECIMAL(10, 2) NOT NULL,
     CONSTRAINT order_product_pkey PRIMARY KEY (order_id, product_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
@@ -242,63 +232,3 @@ CREATE TABLE product_video(
 );
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-
--- Step 1: Add a new UUID column
-ALTER TABLE general_user
-ADD COLUMN user_uuid UUID DEFAULT uuid_generate_v4() UNIQUE;
-
--- Step 2: Update existing rows with UUID values
-UPDATE general_user
-SET user_uuid = uuid_generate_v4();
-
--- Step 3: Drop the old SERIAL column
-ALTER TABLE general_user
-DROP COLUMN user_id;
-
--- Step 4: Rename the new UUID column to match the old name
-ALTER TABLE general_user
-RENAME COLUMN user_uuid TO user_id;
-
-
-
-
-DROP TABLE general_user CASCADE;
-DROP TABLE admin CASCADE;
-DROP TABLE customer CASCADE;
-DROP TABLE delivery_man CASCADE;
-DROP TABLE product CASCADE;
-DROP TABLE product_review CASCADE;
-DROP TABLE order_product CASCADE;
-DROP TABLE orders CASCADE;
-DROP TABLE shipping_address CASCADE;
-DROP TABLE tracker CASCADE;
-DROP TABLE wishlist CASCADE;
-DROP TABLE promo CASCADE;
-DROP TABLE product_category CASCADE;
-DROP TABLE product_attribute CASCADE;
-DROP TABLE contact_us CASCADE;
-DROP TABLE messages CASCADE;
-DROP TABLE notification CASCADE;
-DROP TABLE notice_board CASCADE;
-DROP TABLE order_delivery_man CASCADE;
-
-
-
--- adding unique contraint with category name
-ALTER TABLE product_category
-ADD UNIQUE (category_name);
-
-
-
--- adding another column to product_attribute
-ALTER TABLE product_attribute
-ADD COLUMN base_spec BOOLEAN NOT NULL DEFAULT FALSE;
-
--- modifying discount
-ALTER TABLE product
-ALTER COLUMN discount TYPE DECIMAL(3, 1);
-
-
-
-

@@ -18,6 +18,7 @@ router.post('/register', validInfo, async (req, res) => {
         const { username, email, password, contact_no, profile_img, full_name, gender, staff_status} = req.body;
 
         // 2.check if user exists (if user exists then throw error)
+        
         const user = await pool.query('SELECT * FROM general_user WHERE email = $1 OR username = $2 OR contact_no = $3', [email, username, contact_no]);
         if(user.rows.length !== 0){
             return res.status(401).send('User already exists');
@@ -42,7 +43,10 @@ router.post('/register', validInfo, async (req, res) => {
         // 5. generating our jwt token
 
         const token = jwtGenerator(newUser.rows[0].user_id);
-        res.json({token});
+        res.json({
+            token,
+            message : "User Registered Successfully!"
+        });
 
     }
     catch(err){

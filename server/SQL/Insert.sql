@@ -575,3 +575,11 @@ VALUES('d13a2780-521d-4d53-b5af-60f36e727fb6', 14);
 
 INSERT INTO wishlist(user_id, product_id)
 VALUES('d13a2780-521d-4d53-b5af-60f36e727fb6', 15);
+
+
+f26f0f2f-2ee1-48a6-8187-8fad86bf74eb
+
+
+
+INSERT INTO general_user(username, email, password, contact_no, profile_img, full_name, staff_status)
+VALUES('raihanrsd03', 'raihanrsd03@gmail.com', '123456', '12345678', 'nice.img', 'raihan rashid', 'customer');
