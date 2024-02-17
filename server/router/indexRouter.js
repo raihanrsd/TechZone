@@ -38,4 +38,18 @@ router.use('/wishlist', require('./Wishlist/wishlist'));
 
 router.use('/products/cart', require('./Cart/Cart'));
 
+router.use('/promo', require('./Orders/promo'));
+
+router.use('/order', require('./Orders/place_order'));
+
+router.use('/shipping_address', require('./Customer/shipping_address'));
+
+router.use('/info', require('./User/user_info'));
+
+router.use('/product', require('./Products/product'));
+
+router.use('/get_order', require('./Orders/order'));
+
+router.use('/tracker', require('./Orders/tracker'));
+
 module.exports = router;

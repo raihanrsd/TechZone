@@ -110,6 +110,7 @@ const ShowProducts = () =>{
             });
             const parseRes = await response.json();
             console.log(parseRes);
+            
             console.log(parseRes.message);
             if(parseRes.updateStatus){
                 toast.success("Product Updated Successfully");
@@ -146,6 +147,7 @@ const ShowProducts = () =>{
                                 
                                 <div className="card-body">
                                     <h5 className="card-title">{product.product_name}</h5>
+
                                     <p className="card-text">Category Name: {product.category_name}</p>
                                     <p className="card-text">Price: {product.price}</p>
                                     <p className="card-text">{product.product_description}</p>

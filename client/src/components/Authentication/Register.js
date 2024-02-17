@@ -18,6 +18,8 @@ const Register = ({setAuth}) => {
         staff_status: ""
     });
 
+    console.log("comes here");
+
     const {username, email, password, confirmed_password, contact_no, profile_img, full_name, gender, staff_status} = inputs;
 
     const onChange = e => {
@@ -55,6 +57,10 @@ const Register = ({setAuth}) => {
         } catch (err) {
             console.error(err.message);
         }
+    }
+
+    const handleStaffStatus = (e) => {
+        setInputs({...inputs, staff_status: e.target.value});
     }
 
     return (
@@ -95,9 +101,11 @@ const Register = ({setAuth}) => {
                     <div class="input-group mb-3">
                     <input type="text" name="gender" placeholder="Gender" className="form-control form-control-lg bg-color fs-6" value={gender} onChange={e => onChange(e)} />
                     </div>
-                    <div class="input-group mb-3">
-                    <input type="text" name="staff_status" placeholder="Staff Status" className="form-control form-control-lg bg-color fs-6" value={staff_status} onChange={e => onChange(e)} />
-                    </div>
+                    <label for="Staff Status">Options:</label>
+                    <select className="input-group mb-3 form-control form-control-lg bg-color fs-6" id="Staff Status" value={staff_status} onChange={handleStaffStatus}>
+                        <option value="customer">Customer</option>
+                        <option value="delivery_man">Delivery Man</option>
+                    </select>
 
                     <div class="input-group mb-3">
                         <button class="btn btn-lg btn-primary w-100 h-100 fs-6" onClick={onSubmitForm}>Register</button>

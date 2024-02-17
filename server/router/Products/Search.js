@@ -45,6 +45,17 @@ router.get('/', async(req, res, next) => {
         `);
 
         const all_products = await populate_product(products);
+        const jwtToken = req.header("token")
+        if(jwtToken){
+            await Promise.all(
+                all_products.rows.map(async (product) => {
+                    const user_id = jwt.verify(jwtToken, process.env.jwtSecret).user;
+                    const wishlist_query = await pool.query('SELECT COUNT(*) FROM wishlist WHERE user_id = $1 AND product_id = $2;', [user_id, product.id]);
+                    product.wishlist = wishlist_query.rows[0].count > 0 ? true : false;
+                    return product;
+                }
+            ));
+        }
 
         res.json({
             allCommonSpec: allCommonSpec.rows,

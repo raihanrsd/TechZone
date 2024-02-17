@@ -35,6 +35,9 @@ CREATE TABLE delivery_man (
 );
 
 
+
+
+
 CREATE TABLE product_category(
     category_id SERIAL PRIMARY KEY,
     category_name VARCHAR(200) NOT NULL,
@@ -92,16 +95,21 @@ CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
     user_id uuid NOT NULL,
     date_added DATE NOT NULL DEFAULT CURRENT_DATE,
-    payment_status BOOLEAN NOT NULL, -- we might add dues system later
+    payment_status BOOLEAN NOT NULL DEFAULT FALSE, -- we might add dues system later
     payment_method VARCHAR(200) NOT NULL,
-    order_status VARCHAR(200) NOT NULL,
+    order_status VARCHAR(200) NOT NULL DEFAULT 'Pending',
     promo_name VARCHAR(200),
     delivery_charge DECIMAL(10, 2) NOT NULL CHECK (delivery_charge >= 0),
+    discount_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    total_price DECIMAL(10, 2) NOT NULL CHECK (total_price >= 0),
     transaction_id VARCHAR(200), -- For payment gateway
-    address_id INTEGER NOT NULL,
+    _address TEXT DEFAULT '27/2, Kazi Reazuddin Road',
+    city VARCHAR(200) DEFAULT 'Dhaka',
+    shipping_state VARCHAR(200) DEFAULT 'Dhaka',
+    ip_code VARCHAR(200) DEFAULT '1205',
+    country VARCHAR(200) DEFAULT 'Bangladesh';
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (address_id) REFERENCES shipping_address(address_id) ON DELETE NO ACTION,
-    FOREIGN KEY (promo_name) REFERENCES promo(promo_name) ON DELETE NO ACTION
+    FOREIGN KEY (promo_name) REFERENCES promo(promo_name) ON DELETE SET NULL
 );
 
 
@@ -109,6 +117,8 @@ CREATE TABLE order_product (
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity >= 1),
+    spec_description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
     CONSTRAINT order_product_pkey PRIMARY KEY (order_id, product_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
@@ -157,6 +167,7 @@ CREATE TABLE product_attribute(
     price_increase DECIMAL(10, 2) NOT NULL CHECK (price_increase >= 0),
     stock INTEGER NOT NULL CHECK (stock >= 0),
     sold INTEGER NOT NULL CHECK (sold >= 0),
+    base_spec BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,
     CONSTRAINT unique_product_attribute UNIQUE (product_id, attribute_name, _value)
 );
@@ -207,6 +218,27 @@ CREATE TABLE order_delivery_man(
     order_id INTEGER NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES delivery_man(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE product_image(
+    image_id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    image_url TEXT NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+);
+
+CREATE TABLE user_image(
+    image_id SERIAL PRIMARY KEY,
+    user_id uuid NOT NULL,
+    image_url TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE product_video(
+    video_id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    video_url TEXT NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -268,10 +300,5 @@ ALTER TABLE product
 ALTER COLUMN discount TYPE DECIMAL(3, 1);
 
 
-CREATE TABLE product_image(
-    image_id SERIAL PRIMARY KEY,
-    product_id INTEGER NOT NULL,
-    image_url TEXT NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
-);
+
 

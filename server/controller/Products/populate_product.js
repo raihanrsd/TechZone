@@ -20,7 +20,7 @@ const populate_product = async (products) =>{
             return product;
         })
     );
-
+    
     return products;
 }
 

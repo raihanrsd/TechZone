@@ -109,8 +109,6 @@ GROUP BY P1.id
 HAVING COUNT(DISTINCT P2.ID) < 3);
 
 
-
-
 -- user wishlist
 
 
@@ -144,7 +142,15 @@ HAVING COUNT(M.id) < 1)
 
 
 
+SELECT * FROM general_user WHERE user_id = (
+
+SELECT user_id from ORDERS WHERE order_id = (
+    SELECT order_id FROM tracker WHERE tracker_id = 2
+));
 
 
-
+SELECT U.* FROM GENERAL_USER U 
+JOIN ORDERS O ON U.user_id = O.user_id
+JOIN TRACKER T ON O.order_id = T.order_id
+WHERE T.tracker_id = 2;
 

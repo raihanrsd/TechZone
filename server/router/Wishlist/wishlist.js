@@ -18,6 +18,10 @@ router.get('/',authorization, async(req, res, next) =>{
         const allWishList = await pool.query(sql);
 
         const wishList = await product_populate(allWishList);
+        
+        await wishList.rows.map((product) => {
+            product.wishlist = true;
+        });
         //console.log(wishList.rows[0].specs);
         res.json({
             wishlist: wishList.rows,
@@ -64,6 +68,37 @@ router.get('/top/:number', async(req, res, next) => {
             res.status(500).send('Server Error');
         }
 });
+
+
+router.post('/:id', authorization, async(req, res, next) => {
+    try{
+        const {id} = req.params;
+        const user_id = req.user;
+        const sql = `INSERT INTO wishlist (product_id, user_id) VALUES ($1, $2) RETURNING *`;
+        const values = [id, user_id];
+        const newWish = await pool.query(sql, values);
+        res.json(newWish.rows[0]);
+    }
+    catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+router.delete('/:id', authorization, async(req, res, next) => {
+    try{
+        const {id} = req.params;
+        const user_id = req.user;
+        const sql = `DELETE FROM wishlist WHERE product_id = $1 AND user_id = $2 RETURNING *`;
+        const values = [id, user_id];
+        const deleteWish = await pool.query(sql, values);
+        res.json(deleteWish.rows[0]);
+    }
+    catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+})
 
 
 module.exports = router;

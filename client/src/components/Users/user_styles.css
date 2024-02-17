@@ -1,0 +1,121 @@
+
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+
+  .normalbtn {
+    padding: 10px 18px;
+    margin-right: 10px;
+  }
+
+  .non-interactive {
+    pointer-events: none;
+    background-color: #f1f1f1; /* Optionally set a different background color to indicate non-interactivity */
+    color: #888; /* Optionally set a different text color to indicate non-interactivity */
+  }
+
+  .btn_div{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  
+  .cancelbtn {
+    padding: 10px 18px;
+    background-color: #f44336;
+  }
+  
+  .imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+  }
+  
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+  
+  .container {
+    padding: 16px;
+  }
+  
+  span.psw {
+    float: right;
+    padding-top: 16px;
+  }
+
+  .order-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .order-table th, .order-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .order-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .order-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  /* Styles for payment status */
+.paid {
+    color: white;
+    background-color: green;
+  }
+  
+  .not-paid {
+    color: white;
+    background-color: red;
+  }
+  
+  /* Styles for delivery status */
+  .pending {
+    color: black;
+    background-color: yellow;
+  }
+  
+  .cancelled {
+    color: white;
+    background-color: red;
+  }
+  
+  .delivered {
+    color: white;
+    background-color: green;
+  }
+
+  .shipping-ind-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (max-width: 300px) {
+    span.psw {
+      display: block;
+      float: none;
+    }
+    .cancelbtn {
+      width: 100%;
+    }
+    }

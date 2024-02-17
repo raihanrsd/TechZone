@@ -23,6 +23,18 @@ router.post('/', async (req, res, next) => {
         console.log(err.message);
         res.status(500).send('Server Error');
     }
-})
+});
+
+router.post('/:id', async (req, res, next) => {
+    try{
+        const specs = await pool.query('SELECT * FROM product_attribute WHERE product_id = $1 AND base_spec ORDER BY attribute_name;', [req.params.id]);
+        
+        res.json(specs.rows);
+
+    }catch(err){
+        console.log(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 module.exports = router;
