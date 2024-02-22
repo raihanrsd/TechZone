@@ -1,9 +1,64 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
 import { Link } from "react-router-dom";
-// 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "../ReUse/Notification";
+import { getTotalItems } from "../Cart/cartUtils";
 
-const Navbar = ({ isAuthenticated }) => {
-  console.log('isAuthenticated navbar', isAuthenticated)
+const Navbar = ({ isAuthenticated, setAuth, cartCounter, reRender }) => {
+  //console.log('isAuthenticated navbar', isAuthenticated)
+
+  const [notifications, setNotifications] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+
+    useEffect(() => {
+        const getNotifications = async () => {
+            try {
+                const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/notifications`, {
+                    method: "GET",
+                    headers: { token: localStorage.token }
+                });
+
+                const parseRes = await response.json();
+                console.log(parseRes);
+                setNotifications(parseRes.notifications);
+                setUnreadNotifications(parseRes.unread);
+            } catch (err) {
+                console.error(err.message);
+            }
+        };
+        if(isAuthenticated){
+            getNotifications(); // Call the function to fetch notifications when the component mounts
+        }
+    }, [reRender]);
+  const onClickLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    setAuth(false);
+    toast.info("Logout Successfully");
+  }
+
+  const handleShowNotification = async() => {
+    setShowNotification(!showNotification);
+    try{
+      const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/notifications/seen`, {
+        method: "PUT",
+        headers: { token: localStorage.token }
+      });
+      const parseRes = await response.json();
+      console.log(parseRes);
+      setUnreadNotifications(0);
+      setNotifications(parseRes.notifications);
+    }
+    catch(err){
+      console.error(err.message);
+    }
+  }
+
+
+  const [showNotification, setShowNotification] = useState(false);  
+
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -33,11 +88,26 @@ const Navbar = ({ isAuthenticated }) => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             {isAuthenticated ? (
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link to="/cart" className="nav-link">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                <li className="nav-item nav-icons-div">
+                  <Link to="/cart" className="nav-link" style={{position: 'relative'}} >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16" className='nav-bar-icons' style={{marginTop: '2px'}}>
                     <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                  </svg> Cart
+                  </svg>
+                  {
+                    cartCounter === 0 ? null : <span className="cart-counter">{cartCounter}</span>
+                  }
+                    
+                  </Link>
+                  
+                </li>
+                <li className="nav-item nav-icons-div">
+                <Link>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16" className='nav-bar-icons' onClick={()=> handleShowNotification()}>
+                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+                  </svg>
+                  {
+                    unreadNotifications === 0 ? null : <span className="cart-counter">{unreadNotifications}</span>
+                  }
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -49,6 +119,9 @@ const Navbar = ({ isAuthenticated }) => {
                   <Link to="/user" className="nav-link">
                     My Profile
                   </Link>
+                </li>
+                <li className="nav-item">
+                  <button onClick={onClickLogout} className='btn btn-outline-light'>Logout</button>
                 </li>
               </ul>
             ) : (
@@ -73,6 +146,10 @@ const Navbar = ({ isAuthenticated }) => {
           </div>
         </div>
       </nav>
+      {
+        showNotification && <Notification isAuthenticated={isAuthenticated} notifications={notifications} />
+      }
+
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import ErrorPage from "../ReUse/Error";
+import LoadingIndicator from "../ReUse/LoadingIndicator";
 import "./order.css";
 
 const OrderPage = ({ isAuthenticated }) => {
@@ -10,7 +11,9 @@ const OrderPage = ({ isAuthenticated }) => {
   const [product_info, setProductInfo] = useState(null);
   const [tracker, setTracker] = useState(null);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // New state for loading indicator
   const { order_id } = useParams();
+  const navigate = useNavigate();
 
   function formatDateString(originalDateString) {
     const originalDate = new Date(originalDateString);
@@ -38,20 +41,30 @@ const OrderPage = ({ isAuthenticated }) => {
         console.log(parseRes);
 
         if(!parseRes.isAuthorized){
-            return(
-                <ErrorPage message={parseRes.message} />
-            );
+            navigate("/");
+          return;
         }
         setOrder(parseRes.order);
         setProductInfo(parseRes.product_info);
         setTracker(parseRes.tracker);
         setUser(parseRes.user);
+        
       } catch (err) {
         console.error(err.message);
+      } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
       }
     };
     getOrder();
-  }, []);
+  }, [order_id, navigate]);
+
+  useEffect(() => {
+    console.log('this is product info', product_info)
+  }, [product_info]);
+
+  if (loading) {
+    return <LoadingIndicator />; // Render loading indicator while data is being fetched
+  }
 
   if (!order) {
     return null; // or loading indicator
@@ -86,11 +99,14 @@ const OrderPage = ({ isAuthenticated }) => {
                   
                   <div className="order-product-info-div">
                     <div className="order-product-image-div">
-                      <img
-                        src="/images/Product/test.png"
-                        className="order-product-image"
-                        width="200px"
-                      />
+                    {
+                        product.product && product.product.images ?
+                        <img src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}` + product.product.images[0].image_url} className="order-product-image"
+                        width="200px" height="300px" alt="..." />:
+                        <img src="/images/Product/test.png" className="order-product-image"
+                        width="200px"  alt="..." />
+                    }
+                      
                     </div>
                     <div className="order-product-details-div">
                       <div className="order-product-inner-1">

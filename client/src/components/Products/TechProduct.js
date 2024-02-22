@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShowUserProducts from "./showUserProducts";
 
-export default function TechProduct({isAuthenticated}) {
+export default function TechProduct({isAuthenticated, setCartCounter}) {
     const [products, setProducts] = useState([]);
     useEffect(() => {
         const getProducts = async () => {
@@ -30,7 +30,7 @@ export default function TechProduct({isAuthenticated}) {
 
     return(
         <Fragment>
-            <ShowUserProducts isAuthenticated={isAuthenticated} products={products} setProducts={setProducts} />
+            <ShowUserProducts isAuthenticated={isAuthenticated} products={products} setProducts={setProducts} setCartCounter={setCartCounter} />
         </Fragment>
     )
 }

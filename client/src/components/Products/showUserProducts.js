@@ -3,11 +3,11 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import {addToCart, getCart} from '../Cart/cartUtils';
+import {addToCart, getCart, getTotalItems} from '../Cart/cartUtils';
 
 
 
-const ShowProducts = ({isAuthenticated, products, setProducts}) =>{
+const ShowProducts = ({isAuthenticated, products, setProducts, setCartCounter}) =>{
 
     // useEffect(() => {
     //     const getProducts = async () => {
@@ -53,6 +53,7 @@ const ShowProducts = ({isAuthenticated, products, setProducts}) =>{
                 return product;
             }))
             toast.success("Product added to cart successfully");
+            setCartCounter(getTotalItems());
         }
         catch(err){
             toast.error(err.message);

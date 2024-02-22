@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCart, clearCart } from "../Cart/cartUtils";
 
-const Checkout = ({setAuth}) => {
+const Checkout = ({setAuth, setReRender, reRender}) => {
   const [shippingAddresses, setShippingAddresses] = useState([]);
   const navigate = useNavigate();
   const [shippingAddress, setShippingAddress] = useState({
@@ -28,6 +28,7 @@ const Checkout = ({setAuth}) => {
     // Place order logic here
     // Send the order details to the server
     // Redirect to the order details page
+    // e.preventDefault();
     try {
         console.log("Comes to place order function")
       const body = {
@@ -66,6 +67,7 @@ const Checkout = ({setAuth}) => {
         // Redirect to the order details page
         clearCart();
         setCart(getCart());
+        setReRender(!reRender);
         navigate("/");
       } else {
         toast.error("Failed to place order");
@@ -273,7 +275,7 @@ const Checkout = ({setAuth}) => {
         </div>
       <form className="container">
         <label htmlFor="address">Address:</label>
-        <input
+        <input required
             type="text"
             id="address"
             placeholder="Address"
@@ -285,7 +287,7 @@ const Checkout = ({setAuth}) => {
             }
         />
         <label htmlFor="city">City:</label>
-        <input
+        <input required
           type="text"
           id="city"
           placeholder="City"
@@ -297,7 +299,7 @@ const Checkout = ({setAuth}) => {
           }
         />
         <label htmlFor="shippingState">Shipping State:</label>
-        <input
+        <input required
           type="text"
           id="shippingState"
           placeholder="Shipping State"
@@ -309,7 +311,7 @@ const Checkout = ({setAuth}) => {
           }
         />
         <label htmlFor="zipCode">Zip Code:</label>
-        <input
+        <input required
           type="text"
           id="zipCode"
           placeholder="Zip Code"
@@ -321,7 +323,7 @@ const Checkout = ({setAuth}) => {
           }
         />
         <label htmlFor="country">Country:</label>
-        <input
+        <input required
           type="text"
           id="country"
           placeholder="Country"

@@ -11,7 +11,7 @@ import Navbar from "./Navbar";
 
 import ProductSlider from "../Products/productSlider";
 
-export default function Home({isAuthenticated}) {
+export default function Home({isAuthenticated, setAuth}) {
   const [products, setProducts] = useState([]);
   useEffect(() =>{
     const getFeaturedProduct = async() =>{
@@ -32,6 +32,8 @@ export default function Home({isAuthenticated}) {
 
     getFeaturedProduct();
 }, [])
+
+
   return (
     <Fragment>
 
