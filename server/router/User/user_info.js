@@ -67,7 +67,12 @@ router.put('/user', authorization, async (req, res) => {
 router.get('/user/order', authorization, async (req, res) => {
     try{
         const id = req.user;
-        const orderQuery = await pool.query('SELECT * FROM orders WHERE user_id = $1', [id]);
+        const user = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [id]);
+
+        let orderQuery = await pool.query('SELECT * FROM orders WHERE user_id = $1 ORDER BY order_id DESC', [id]);
+        if(user.rows[0].staff_status === 'admin'){
+            orderQuery = await pool.query('SELECT * FROM ORDERs ORDER BY order_id DESC;')
+        }
         if(orderQuery.rows.length > 0){
             res.json({
                 orders: orderQuery.rows,

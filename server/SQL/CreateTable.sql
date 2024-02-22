@@ -71,8 +71,8 @@ CREATE TABLE product_review (
     user_id uuid NOT NULL,
     product_id INTEGER NOT NULL,
     review TEXT NOT NULL,
-    rating INTEGER NOT NULL CHECK (rating >= 0 AND rating <= 5),
-    date_added DATE NOT NULL DEFAULT CURRENT_DATE,
+    rating NUMERIC NOT NULL CHECK (rating >= 0 AND rating <= 5),
+    time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
@@ -199,7 +199,7 @@ CREATE TABLE notification(
     user_id uuid NOT NULL,
     notification_description TEXT NOT NULL,
     seen_status BOOLEAN NOT NULL DEFAULT FALSE,
-    date_added DATE NOT NULL DEFAULT CURRENT_DATE,
+    time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
 
@@ -227,6 +227,8 @@ CREATE TABLE product_image(
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
 
+
+
 CREATE TABLE user_image(
     image_id SERIAL PRIMARY KEY,
     user_id uuid NOT NULL,
@@ -240,6 +242,28 @@ CREATE TABLE product_video(
     video_url TEXT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 );
+
+
+CREATE TABLE product_qa (
+    question_id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
+    question_text TEXT NOT NULL,
+    time_asked TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE product_qa_answers (
+    answer_id SERIAL PRIMARY KEY,
+    question_id INTEGER NOT NULL,
+    user_id uuid NOT NULL,
+    answer_text TEXT NOT NULL,
+    time_answered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (question_id) REFERENCES product_qa(question_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
+);
+
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

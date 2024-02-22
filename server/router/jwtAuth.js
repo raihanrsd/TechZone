@@ -16,7 +16,7 @@ router.post('/register', validInfo, async (req, res) => {
         // 1. destructure the req.body (name, email, password, contact_no, profile_img, full_name, gender, staff_status
 
         const { username, email, password, contact_no, profile_img, full_name, gender, staff_status} = req.body;
-
+        console.log(username, email, password, contact_no, profile_img, full_name, gender, staff_status);
         // 2.check if user exists (if user exists then throw error)
         
         const user = await pool.query('SELECT * FROM general_user WHERE email = $1 OR username = $2 OR contact_no = $3', [email, username, contact_no]);

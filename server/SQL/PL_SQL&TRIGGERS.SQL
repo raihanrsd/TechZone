@@ -40,12 +40,17 @@ EXECUTE FUNCTION create_order_tracker();
 
 CREATE OR REPLACE FUNCTION update_order_payment()
 RETURNS TRIGGER AS $$
+DECLARE 
+    USERID uuid;
 BEGIN
     -- Insert a record into the tracker table when a new order is added
-    IF progress = 100 THEN
+    SELECT user_id INTO USERID FROM orders WHERE order_id = NEW.order_id;
+    IF NEW.progress = 100 THEN
         UPDATE orders SET order_status = 'Delivered' WHERE order_id = NEW.order_id;
+        INSERT INTO notification(user_id, notification_description) VALUES (USERID, 'Your order has been delivered. Order Id # ' || NEW.order_id);
     ELSE 
         UPDATE orders SET order_status = 'Pending' WHERE order_id = NEW.order_id;
+        INSERT INTO notification(user_id, notification_description) VALUES (USERID, 'Your order status has been updated. Order Id # ' || NEW.order_id);
     END IF;
     RETURN NEW;
 END;
@@ -56,6 +61,65 @@ CREATE TRIGGER tracker_progress_update
 AFTER UPDATE ON tracker OF progress
 FOR EACH ROW
 EXECUTE FUNCTION update_order_payment();
+
+
+
+CREATE OR REPLACE FUNCTION remove_tracker_on_cancel()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.order_status = 'Cancelled' THEN
+        -- Delete the corresponding row from the tracker table
+        DELETE FROM tracker WHERE order_id = NEW.order_id;
+        INSERT INTO notification(user_id, notification_description)
+        VALUES (NEW.user_id, "Your order Has been cancelled and your order has been updated");
+
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER remove_tracker_trigger
+AFTER UPDATE OF order_status ON orders
+FOR EACH ROW
+EXECUTE FUNCTION remove_tracker_on_cancel();
+
+
+CREATE OR REPLACE FUNCTION notification_on_order()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notification(user_id, notification_description)
+    VALUES (NEW.user_id, 'Your Order has been placed. Your order Id is ' || NEW.order_id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER add_order_notification
+AFTER INSERT ON orders
+FOR EACH ROW
+EXECUTE FUNCTION notification_on_order();
+
+
+-- 6. Create a trigger to notify the user when a new tracker is created
+CREATE OR REPLACE FUNCTION notification_on_tracker()
+RETURNS TRIGGER AS $$
+DECLARE 
+    USERID uuid;
+BEGIN
+    SELECT user_id INTO USERID FROM orders WHERE order_id = NEW.order_id;
+    INSERT INTO notification(user_id, notification_description)
+    VALUES (USERID, 'Your tracker is created. Please track your order at /tracker/' || NEW.tracker_id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER add_tracker_notification
+AFTER INSERT ON tracker
+FOR EACH ROW
+EXECUTE FUNCTION notification_on_tracker();
+
+
+
+
 
 
 

@@ -52,4 +52,10 @@ router.use('/get_order', require('./Orders/order'));
 
 router.use('/tracker', require('./Orders/tracker'));
 
+router.use('/notifications', require('./User/notification'));
+
+router.use('/review', require('./User/review'));
+
+router.use('/qa', require('./User/qa'));
+
 module.exports = router;

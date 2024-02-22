@@ -7,10 +7,12 @@ const authorization = require('../../middlewares/authorization');
 router.get('/:id', authorization, async (req, res) => {
     try{
         const id = req.params.id;
+        let user = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [req.user]);
         
         const order = await pool.query('SELECT * FROM orders WHERE order_id = $1', [id]);
-        let user = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [req.user]);
-        if(order.user_id !== req.user && user.rows[0].staff_status !== 'admin'){
+        
+        console.log(order.rows[0].user_id, req.user, user.rows[0].staff_status, 'user');
+        if(order.rows[0].user_id !== req.user && user.rows[0].staff_status !== 'admin'){
             return res.status(401).json({
                 message: 'You are not authorized to view this order',
                 isAuthorized: false
@@ -22,6 +24,8 @@ router.get('/:id', authorization, async (req, res) => {
                 product_info.rows.map(async (product) => {
                     const product_query = await pool.query('SELECT * FROM product WHERE id = $1', [product.product_id]);
                     product.product = product_query.rows[0];
+                    const images = await pool.query('SELECT * FROM product_image WHERE product_id = $1', [product.product_id]);
+                    product.product.images = images.rows;
                     return product;
                 })
             )
