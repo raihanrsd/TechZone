@@ -107,7 +107,9 @@ CREATE TABLE orders(
     city VARCHAR(200) DEFAULT 'Dhaka',
     shipping_state VARCHAR(200) DEFAULT 'Dhaka',
     ip_code VARCHAR(200) DEFAULT '1205',
-    country VARCHAR(200) DEFAULT 'Bangladesh';
+    country VARCHAR(200) DEFAULT 'Bangladesh',
+    delivery_time TIMESTAMP DEFAULT NULL,
+    reason_for_cancellation TEXT DEFAULT '',
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (promo_name) REFERENCES promo(promo_name) ON DELETE SET NULL
 );
@@ -263,6 +265,8 @@ CREATE TABLE product_qa_answers (
     FOREIGN KEY (question_id) REFERENCES product_qa(question_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
+
+
 
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

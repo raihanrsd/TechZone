@@ -48,6 +48,8 @@ BEGIN
     IF NEW.progress = 100 THEN
         UPDATE orders SET order_status = 'Delivered' WHERE order_id = NEW.order_id;
         INSERT INTO notification(user_id, notification_description) VALUES (USERID, 'Your order has been delivered. Order Id # ' || NEW.order_id);
+
+        CALL set_delivery_time(NEW.order_id);
     ELSE 
         UPDATE orders SET order_status = 'Pending' WHERE order_id = NEW.order_id;
         INSERT INTO notification(user_id, notification_description) VALUES (USERID, 'Your order status has been updated. Order Id # ' || NEW.order_id);
@@ -116,6 +118,22 @@ CREATE TRIGGER add_tracker_notification
 AFTER INSERT ON tracker
 FOR EACH ROW
 EXECUTE FUNCTION notification_on_tracker();
+
+
+
+
+-- procedure 1
+CREATE OR REPLACE PROCEDURE set_delivery_time(order_id_arg INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  -- Update the delivery_time to the current timestamp
+  UPDATE orders
+  SET delivery_time = CURRENT_TIMESTAMP
+  WHERE order_id = order_id_arg;
+
+END;
+$$;
 
 
 

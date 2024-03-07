@@ -58,4 +58,8 @@ router.use('/review', require('./User/review'));
 
 router.use('/qa', require('./User/qa'));
 
+router.use('/delivery_man', require('./DeliveryMan/delivery_man_info'))
+
+router.use('/DMorders', require('./DeliveryMan/delivery_man_orders'))
+
 module.exports = router;

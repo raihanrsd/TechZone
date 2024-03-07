@@ -91,3 +91,11 @@ ADD CONSTRAINT product_review_rating_check CHECK (rating >= 0 AND rating <= 5);
 ALTER TABLE product
 ADD COLUMN admin_id uuid NOT NULL DEFAULT 'f26f0f2f-2ee1-48a6-8187-8fad86bf74eb',
 ADD FOREIGN KEY (admin_id) REFERENCES admin(user_id) ON DELETE CASCADE;
+
+
+
+ALTER TABLE orders 
+ADD COLUMN delivery_time TIMESTAMP DEFAULT NULL; 
+
+ALTER TABLE orders 
+ADD COLUMN reason_for_cancellation TEXT DEFAULT '';

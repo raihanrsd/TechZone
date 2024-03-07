@@ -31,8 +31,10 @@ router.post('/question',authorization, async (req, res, next) => {
 router.post('/answer',authorization, async (req, res, next) => {
     try{
         const {question_id, answer} = req.body;
-        const user = pool.query('SELECT * FROM general_user WHERE user_id = $1', [req.user]);
-        if(user.staff_status !== 'admin'){
+
+        const user = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [req.user]);
+
+        if(user.rows[0].staff_status !== 'admin'){
             return res.status(401).json({message: 'Unauthorized'});
         }
         const sql = `

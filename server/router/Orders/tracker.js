@@ -21,7 +21,7 @@ router.get('/:id', authorization, async (req, res) => {
 
             const user = await pool.query(sql);
             const current_user = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [req.user]);
-            if(user.rows[0].user_id != req.user && current_user.rows[0].staff_status !== 'admin'){
+            if(user.rows[0].user_id != req.user && current_user.rows[0].staff_status !== 'admin' && current_user.rows[0].staff_status !== 'delivery_man'){
                 console.log('this is user', user.rows[0]);
                 console.log('this is staff status',user.rows[0].staff_status);
                 return res.status(401).json({
@@ -30,7 +30,23 @@ router.get('/:id', authorization, async (req, res) => {
                 });
             }
 
+            
+
             const order = await pool.query('SELECT * FROM orders WHERE order_id = $1', [response.rows[0].order_id]);
+
+            if(user.rows[0].staff_status === 'delivery_man'){
+                const is_assigned_order = await pool.query(`
+                    SELECT * FROM order_delivery_man WHERE order_id = $1 AND user_id = $2
+                `, [order.order_id, req.user]);
+                
+                if(is_assigned_order.rows.length === 0){
+                    return res.status(401).json({
+                        message: 'You are not authorized to view this tracker',
+                        isAuthorized: false
+                    });
+                }
+            }
+
             res.json({
                 tracker: response.rows[0],
                 user: user.rows[0],
@@ -65,12 +81,14 @@ router.post('/', authorization, async (req, res, next) => {
         
         const response2  = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [req.user]);
         const user = response2.rows[0];
-        if(user.staff_status !== 'admin'){
+        if(user.staff_status !== 'admin' && user.staff_status !== 'delivery_man'){
             return res.status(401).json({
                 message: 'You are not authorized to update this tracker',
                 isAuthorized: false
             });
         }
+
+
 
         const sql = `
             UPDATE tracker SET progress = $1 WHERE tracker_id = $2 RETURNING *;

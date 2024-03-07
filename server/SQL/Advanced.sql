@@ -154,3 +154,24 @@ JOIN ORDERS O ON U.user_id = O.user_id
 JOIN TRACKER T ON O.order_id = T.order_id
 WHERE T.tracker_id = 2;
 
+
+
+-- available orders 
+
+SELECT *
+        FROM orders
+        WHERE order_id IN (
+            SELECT order_id FROM orders 
+            EXCEPT 
+            SELECT order_id FROM order_delivery_man
+        );
+
+-- completed orders 
+SELECT * from orders WHERE order_id IN (
+                SELECT order_id FROM orders WHERE 
+                order_status = 'Delivered' OR order_status = 'Cancelled'
+                INTERSECT(
+                    SELECT order_id FROM order_delivery_man
+                    WHERE user_id = '8c1ffbd8-9fb3-4b3d-87f8-1ca6ff5f8902'
+                )
+            )

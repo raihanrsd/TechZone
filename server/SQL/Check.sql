@@ -14,5 +14,13 @@ SELECT * FROM category WHERE category_name = $1
 
 
 
+SELECT DISTINCT PA.attribute_name FROM product_attribute PA 
+JOIN product P ON PA.product_id = P.id
+JOIN category C ON C.parent_category_id = 2 AND C.category_id = 
+
+
+
+
+
 
 
