@@ -1,11 +1,11 @@
-import {React, useState, useEffect} from "react";
+import {React, useState, useEffect, Fragment} from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "../ReUse/Notification";
 import { getTotalItems } from "../Cart/cartUtils";
 
-const Navbar = ({ isAuthenticated, setAuth, cartCounter, reRender }) => {
+const Navbar = ({ isAuthenticated, setAuth, cartCounter, reRender, setIsAdmin, setIsDeliveryMan, isAdmin, isDeliveryMan }) => {
   //console.log('isAuthenticated navbar', isAuthenticated)
 
   const [notifications, setNotifications] = useState([]);
@@ -35,6 +35,8 @@ const Navbar = ({ isAuthenticated, setAuth, cartCounter, reRender }) => {
     e.preventDefault();
     localStorage.removeItem("token");
     setAuth(false);
+    setIsAdmin(false);
+    setIsDeliveryMan(false);
     toast.info("Logout Successfully");
   }
 
@@ -57,7 +59,13 @@ const Navbar = ({ isAuthenticated, setAuth, cartCounter, reRender }) => {
 
 
   const [showNotification, setShowNotification] = useState(false);  
+  if(isAdmin || isDeliveryMan){
+    return (
+      <Fragment>
 
+      </Fragment>
+    )
+  }
 
   return (
     <div>

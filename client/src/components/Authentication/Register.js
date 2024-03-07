@@ -15,7 +15,7 @@ const Register = ({setAuth}) => {
         profile_img: "",
         full_name: "",
         gender: "",
-        staff_status: ""
+        staff_status: "customer"
     });
 
     console.log("comes here");
@@ -33,7 +33,8 @@ const Register = ({setAuth}) => {
                 alert("Passwords do not match");
             }
             
-            const body = {username, email, password, contact_no, profile_img, full_name, gender, staff_status};
+            const body = {username, email, password, confirmed_password, contact_no, profile_img, full_name, gender, staff_status};
+            console.log(body);
             const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/register`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -60,7 +61,10 @@ const Register = ({setAuth}) => {
     }
 
     const handleStaffStatus = (e) => {
-        setInputs({...inputs, staff_status: e.target.value});
+        setInputs((prevInputs) => ({
+            ...prevInputs,
+            staff_status: e.target.value
+        }));
     }
 
     return (
@@ -102,7 +106,7 @@ const Register = ({setAuth}) => {
                     <input type="text" name="gender" placeholder="Gender" className="form-control form-control-lg bg-color fs-6" value={gender} onChange={e => onChange(e)} />
                     </div>
                     <label for="Staff Status">Options:</label>
-                    <select className="input-group mb-3 form-control form-control-lg bg-color fs-6" id="Staff Status" value={staff_status} onChange={handleStaffStatus}>
+                    <select className="input-group mb-3 form-control form-control-lg bg-color fs-6" id="Staff Status" value={staff_status} onChange={e => handleStaffStatus(e)}>
                         <option value="customer">Customer</option>
                         <option value="delivery_man">Delivery Man</option>
                     </select>

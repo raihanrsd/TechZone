@@ -19,7 +19,7 @@ const Checkout = ({setAuth, setReRender, reRender}) => {
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
   const [deliveryLocation, setDeliveryLocation] = useState("insideDhaka");
   const [cart, setCart] = useState(getCart());
   const [shippingAddressId, setShippingAddressId] = useState();
@@ -35,7 +35,7 @@ const Checkout = ({setAuth, setReRender, reRender}) => {
         payment_method: paymentMethod,
         delivery_charge: deliveryCharge,
         total_price: totalPrice - discount + deliveryCharge,
-        promo_name: promoCode == ""? 'none' : promoCode,
+        promo_name: promoCode === ""? 'none' : promoCode,
         discount_amount: discount,
         _address: shippingAddress.address,
         city: shippingAddress.city,
@@ -494,9 +494,9 @@ const Checkout = ({setAuth, setReRender, reRender}) => {
               type="radio"
               id="creditCard"
               name="paymentMethod"
-              value="creditCard"
-              checked={paymentMethod === "creditCard"}
-              onChange={() => handlePaymentMethodChange("creditCard")}
+              value="Online Payment"
+              checked={paymentMethod === "Online Payment"}
+              onChange={() => handlePaymentMethodChange("Online Payment")}
             />
             <label htmlFor="creditCard">Online Payment</label>
           </div>
@@ -505,9 +505,9 @@ const Checkout = ({setAuth, setReRender, reRender}) => {
               type="radio"
               id="cashOnDelivery"
               name="paymentMethod"
-              value="cashOnDelivery"
-              checked={paymentMethod === "cashOnDelivery"}
-              onChange={() => handlePaymentMethodChange("cashOnDelivery")}
+              value="Cash On Delivery"
+              checked={paymentMethod === "Cash On Delivery"}
+              onChange={() => handlePaymentMethodChange("Cash On Delivery")}
             />
             <label htmlFor="cashOnDelivery">Cash on Delivery</label>
           </div>

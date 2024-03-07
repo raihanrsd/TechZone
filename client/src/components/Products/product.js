@@ -11,7 +11,7 @@ import QaAddComponent from "./QA_Add";
 import QaListComponent from "./QA_List";
 
 
-const Product = ({ isAuthenticated }) => {
+const Product = ({ isAuthenticated, isAdmin }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [display, setDisplay] = useState(true);
@@ -235,6 +235,39 @@ const Product = ({ isAuthenticated }) => {
     }
   }
 
+  const handleSubmitAnswer = async (answer, question_id) => {
+    try{
+      const body = {
+        question_id: question_id,
+        answer: answer,
+      }
+      const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/qa/answer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.token,
+        },
+        body: JSON.stringify(body),
+      });
+      const parseRes = await response.json();
+      console.log(parseRes);
+      const updatedQuestions = questions.map((question) => {
+        if (question.question_id === question_id) {
+
+          return {
+            ...question,
+            answers: parseRes.answers,
+          };
+        }
+        return question;
+      });
+      setQuestions(updatedQuestions);
+      toast.success("Answer added successfully");
+    }catch(err){
+      console.error(err.message);
+    }
+  } 
+
   return (
     <Fragment>
       <div className="product-main-div">
@@ -311,10 +344,10 @@ const Product = ({ isAuthenticated }) => {
             </div>
             <div className='product-page-lower-div'>
             <div className='review-div'>
-                <ReviewComponent product_id={id} onReviewSubmit={onReviewSubmit} /> 
+                <ReviewComponent product_id={id} onReviewSubmit={onReviewSubmit} isAuthenticated={isAuthenticated} /> 
                 <ReviewList reviews={reviews} product_id={id} setReview={setReviews} />
                 <QaAddComponent product_id={id} onQuestionSubmit={onQuestionSubmit} />
-                <QaListComponent questions={questions} product_id={id} />
+                <QaListComponent questions={questions} product_id={id} isAdmin={isAdmin} handleAnswerSubmit={handleSubmitAnswer} />
             </div>
             <div className='spec-div'>
               <h2>Choose Your Configuration</h2>
