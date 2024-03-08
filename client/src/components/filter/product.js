@@ -5,8 +5,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import './filter-css/product.css';
 import './filter-css/products.scss';
-import Card from './product-card';
 
+import Card from './product-card';
+import LoadingPage from '../ReUse/LoadingPage';
 
 // Function to chunk array into smaller arrays
 function chunkArray(array, size) {
@@ -53,18 +54,7 @@ export default function Product({ isAuthenticated, props }) { // array of produc
 
     if(!isAuthenticated){
         return (
-            <Fragment>                
-                <div class="wrapper">
-                        <div class="box-wrap">
-                            <div class="box one"></div>
-                            <div class="box two"></div>
-                            <div class="box three"></div>
-                            <div class="box four"></div>
-                            <div class="box five"></div>
-                            <div class="box six"></div>
-                        </div>
-                </div>                    
-            </Fragment>
+           <LoadingPage/>
         );
     }
 
