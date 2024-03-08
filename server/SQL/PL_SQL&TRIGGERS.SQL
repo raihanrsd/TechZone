@@ -137,6 +137,61 @@ $$;
 
 
 
+-- procedure 2
+CREATE OR REPLACE PROCEDURE assign_customer_service_admin(user_id_to_assign UUID)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    admin_to_assign UUID;
+BEGIN
+    -- Select a customer service admin with the fewest customers and not fired
+    SELECT A.user_id
+    INTO admin_to_assign
+    FROM admin A
+    LEFT JOIN (
+        SELECT DISTINCT sender_id, receiver_id
+        FROM messages
+    ) M ON A.user_id = M.sender_id
+    WHERE A.is_employed = true
+    AND A.clearance_level = 'customer_service'
+    GROUP BY A.user_id
+    ORDER BY COUNT(M.receiver_id) ASC
+    LIMIT 1
+    ;
+
+    -- If an admin is found, assign the user to them
+    IF admin_to_assign IS NOT NULL THEN
+        INSERT INTO messages(sender_id, receiver_id, _message)
+        VALUES (admin_to_assign, user_id_to_assign, 'Hello! I am your new guide in your journey to Awesomeness. Feel Free to knock me up if you have any queries!');
+
+        RAISE NOTICE 'User % assigned to Customer Service Admin %', user_id_to_assign, admin_to_assign;
+    ELSE
+        RAISE EXCEPTION 'No available Customer Service Admin found';
+    END IF;
+END;
+$$;
+
+
+
+-- prodcedure 3
+CREATE OR REPLACE PROCEDURE delivery_man_message(delivery_man_id UUID, orderId INT)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    user_id_to_message UUID;
+    delivery_man_name TEXT;
+BEGIN
+    -- Select a customer service admin with the fewest customers and not fired
+    SELECT user_id INTO user_id_to_message FROM orders WHERE order_id = orderId;
+    INSERT INTO messages(sender_id, receiver_id, _message) VALUES (delivery_man_id, user_id_to_message,
+    'Hello! I am the delivery man for your order #' || orderId || '. I will be delivering your order soon. Please be ready to receive it. Thank you!');
+    SELECT full_name INTO delivery_man_name FROM general_user WHERE user_id = delivery_man_id;
+    INSERT INTO notification(user_id, notification_description) VALUES (user_id_to_message, 'Your order #' || orderId || ' is being delivered by our delivery man ' || delivery_man_name);
+END;
+$$;
+
+
+
 
 
 

@@ -598,3 +598,12 @@ VALUES('customerService2', 'customerService2@gmail.com', '$2b$10$K2uLTjOY1TG/IkF
 
 INSERT INTO general_user(username, email, password, contact_no, profile_img, full_name, staff_status)
 VALUES('customerService3', 'customerService3@gmail.com', '$2b$10$K2uLTjOY1TG/IkFwn7dPXOrWSySMJxp/wi1j3Pj7UBNarsxqKOfIO', '125323433', 'user.img', 'raihan rashid', 'admin');
+
+
+INSERT INTO messages(sender_id, receiver_id, _message)
+VALUES ('f26f0f2f-2ee1-48a6-8187-8fad86bf74eb', '6324f33a-e369-40e6-97ba-3dce6bb688ef',  'This is the another message');
+
+
+INSERT INTO messages(sender_id, receiver_id, _message)
+VALUES ('e3620496-1472-46f8-b089-abaab6472f3a', '6324f33a-e369-40e6-97ba-3dce6bb688ef',  'Hello I am in charge of your customer service. Please feel free to state your queries.');
+

@@ -99,3 +99,14 @@ ADD COLUMN delivery_time TIMESTAMP DEFAULT NULL;
 
 ALTER TABLE orders 
 ADD COLUMN reason_for_cancellation TEXT DEFAULT '';
+
+
+
+ALTER TABLE messages
+ADD COLUMN time_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE messages
+DROP COLUMN date_added;
+
+ALTER TABLE admin
+ADD COLUMN is_employed BOOLEAN DEFAULT TRUE;

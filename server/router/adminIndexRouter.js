@@ -19,6 +19,7 @@ router.use('/add', adds_prod.category_add);
 router.use('/delete', delete_category_product);
 router.use('/update', update_product);
 router.use('/upload/product/images', upload_product_images);
+router.use('/all_orders', require('./Admin/all_orders'));
 
 
 module.exports = router;
