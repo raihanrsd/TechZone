@@ -157,7 +157,7 @@ const ShippingPage = () =>{
             
 
             <div className="container">
-                {
+                {   addresses &&
                     addresses.map(address => (
                         <div key={address.id} className="card">
                             <div className="card-body">

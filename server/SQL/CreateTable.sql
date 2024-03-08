@@ -23,6 +23,8 @@ CREATE TABLE customer (
 CREATE TABLE admin (
     user_id uuid PRIMARY KEY,
     clearance_level VARCHAR(50) NOT NULL,
+    is_employed BOOLEAN DEFAULT TRUE,
+    hire_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
 
@@ -105,7 +107,7 @@ CREATE TABLE orders(
     _address TEXT DEFAULT '27/2, Kazi Reazuddin Road',
     city VARCHAR(200) DEFAULT 'Dhaka',
     shipping_state VARCHAR(200) DEFAULT 'Dhaka',
-    ip_code VARCHAR(200) DEFAULT '1205',
+    zip_code VARCHAR(200) DEFAULT '1205',
     country VARCHAR(200) DEFAULT 'Bangladesh',
     delivery_time TIMESTAMP DEFAULT NULL,
     reason_for_cancellation TEXT DEFAULT '',
@@ -160,6 +162,8 @@ CREATE TABLE promo(
 
 
 
+
+
 CREATE TABLE product_attribute(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     product_id INTEGER NOT NULL,
@@ -189,7 +193,7 @@ CREATE TABLE messages(
     receiver_id uuid NOT NULL,
     _message TEXT NOT NULL,
     seen_status BOOLEAN NOT NULL DEFAULT FALSE,
-    date_added DATE NOT NULL DEFAULT CURRENT_DATE,
+    time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (sender_id) REFERENCES general_user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );

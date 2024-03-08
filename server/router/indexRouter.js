@@ -75,4 +75,7 @@ router.use('/delivery_man', require('./DeliveryMan/delivery_man_info'))
 
 router.use('/DMorders', require('./DeliveryMan/delivery_man_orders'))
 
+
+router.use('/messages', require('./Messages/messages'));
+
 module.exports = router;

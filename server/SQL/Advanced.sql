@@ -110,8 +110,6 @@ HAVING COUNT(DISTINCT P2.ID) < 3);
 
 
 -- user wishlist
-
-
 SELECT DISTINCT P.* FROM general_user G 
 LEFT JOIN wishlist W ON W.user_id = G.user_id
 LEFT JOIN product P ON P.id = W.product_id
@@ -138,10 +136,6 @@ HAVING COUNT(M.id) < 1)
 
 
 
-
-
-
-
 SELECT * FROM general_user WHERE user_id = (
 
 SELECT user_id from ORDERS WHERE order_id = (
@@ -149,6 +143,7 @@ SELECT user_id from ORDERS WHERE order_id = (
 ));
 
 
+-- user info from tracker id
 SELECT U.* FROM GENERAL_USER U 
 JOIN ORDERS O ON U.user_id = O.user_id
 JOIN TRACKER T ON O.order_id = T.order_id
@@ -175,3 +170,45 @@ SELECT * from orders WHERE order_id IN (
                     WHERE user_id = '8c1ffbd8-9fb3-4b3d-87f8-1ca6ff5f8902'
                 )
             )
+
+
+
+-- retriving user messages
+
+SELECT * FROM general_user WHERE user_id IN (
+            SELECT sender_id FROM messages WHERE receiver_id = '6324f33a-e369-40e6-97ba-3dce6bb688ef'
+            UNION
+            SELECT receiver_id FROM messages WHERE sender_id = '6324f33a-e369-40e6-97ba-3dce6bb688ef'
+        );
+
+
+
+
+-- retriving the available customer service individual
+
+SELECT A.user_id
+    FROM admin A
+    LEFT JOIN (
+        SELECT DISTINCT sender_id, receiver_id
+        FROM messages
+    ) M ON A.user_id = M.sender_id
+    WHERE A.is_employed = true
+    AND A.clearance_level = 'customer_service'
+    GROUP BY A.user_id
+    ORDER BY COUNT(M.receiver_id) ASC
+    LIMIT 1
+    ;
+
+
+-- retriving both info of delivery man
+SELECT G.*, D.* FROM general_user G 
+LEFT JOIN delivery_man D ON G.user_id = D.user_id 
+WHERE G.user_id IN (SELECT DISTINCT user_id 
+FROM order_delivery_man WHERE order_id = 71);
+
+
+
+-- top sold product in a time line
+
+SELECT O.*, OP.* FROM orders O JOIN order_product OP ON O.order_id = OP.order_id
+WHERE O.order_time BETWEEN '2024-01-01' AND '2024-12-31';

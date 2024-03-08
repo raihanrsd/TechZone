@@ -61,17 +61,19 @@ export default function Product({ isAuthenticated, props }) { // array of produc
     return (
         <Fragment>
             <div className="product-box-container">
+               
                 <div className="product-box">
                     {pageProduct && pageProduct[currentPage - 1] && chunkArray(pageProduct[currentPage - 1], 4).map((row, index) =>  (
                         <div key={index} className="row">
                             {row.map(item => (
-                                <div key={item.id} className="col-md-3">
-                                    <Card key={item.id} item={item} />
+                                <div key={item.id} className='col-md-3' >
+                                    <Card key={item.id} item={item}  />
                                 </div>
                             ))}
                         </div>
                     ))}
                 </div>
+               
 
                 <div className='pageination-container'>
                     <ul className="pagination">

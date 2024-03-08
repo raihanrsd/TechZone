@@ -148,7 +148,7 @@ const OrderPage = ({ isAuthenticated }) => {
                   <div className="order-product-info-div">
                     <div className="order-product-image-div">
                     {
-                        product.product && product.product.images ?
+                        product.product && product.product.images[0] ?
                         <img src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}` + product.product.images[0].image_url} className="order-product-image"
                         width="200px" height="300px" alt="..." />:
                         <img src="/images/Product/test.png" className="order-product-image"

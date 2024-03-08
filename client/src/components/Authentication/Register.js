@@ -5,14 +5,13 @@ import {toast} from 'react-toastify';
 import "../css/login.css";
 import logo from "../../image/login.png";
 
-const Register = ({setAuth}) => {
+const Register = ({setAuth, setIsAdmin, setIsDeliveryMan}) => {
     const [inputs, setInputs] = useState({
         username: "",
         email: "",
         password: "",
         confirmed_password: "",
         contact_no: "",
-        profile_img: "",
         full_name: "",
         gender: "",
         staff_status: "customer"
@@ -33,7 +32,7 @@ const Register = ({setAuth}) => {
                 alert("Passwords do not match");
             }
             
-            const body = {username, email, password, confirmed_password, contact_no, profile_img, full_name, gender, staff_status};
+            const body = {username, email, password, confirmed_password, contact_no, profile_img : 'user.png', full_name, gender, staff_status};
             console.log(body);
             const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/register`, {
                 method: "POST",
@@ -46,11 +45,14 @@ const Register = ({setAuth}) => {
 
             if(parseRes.token){
                 localStorage.setItem("token", parseRes.token);
+                setIsAdmin(parseRes.isAdmin);
+                setIsDeliveryMan(parseRes.isDeliveryMan);
                 setAuth(true);
                 // console.log("Registered Successfully")
                 toast.success("You are Registered Successfully");
             }
             else{
+                
                 setAuth(false);
                 console.log(parseRes);
                 toast.error(parseRes);
@@ -95,9 +97,6 @@ const Register = ({setAuth}) => {
                     </div>
                     <div class="input-group mb-3">
                         <input type="text" name="contact_no" placeholder="Contact No." className="form-control form-control-lg bg-color fs-6" value={contact_no} onChange={e => onChange(e)} />
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" name="profile_img" placeholder="Profile Image" className="form-control form-control-lg bg-color fs-6" value={profile_img} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
                     <input type="text" name="full_name" placeholder="Full Name"className="form-control form-control-lg bg-color fs-6" value={full_name} onChange={e => onChange(e)} />

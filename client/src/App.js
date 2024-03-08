@@ -1,14 +1,16 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addToCart, getCart, getTotalItems } from './components/Cart/cartUtils';
 
 
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useHistory } from 'react-router-dom';
 
 import Login from './components/Authentication/Login';
 import Register from './components/Authentication/Register';
+
+import ChatImg from './image/comments.png';
 
 
 import Home from './components/ReUse/Home';
@@ -32,6 +34,7 @@ import ErrorPage from './components/ReUse/Error';
 import TrackerPage from './components/Order/Tracker';
 import LoadingIndicator from './components/ReUse/LoadingIndicator';
 import AdminDeliveryManUi from './components/Admin/AdminDeliveryManUi';
+import MessagingInterface from './components/Messaging/MessageInterface';
 
 
 import FilterPage from './components/filter/filterPage';
@@ -42,7 +45,11 @@ function App() {
   const [reRender, setReRender] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isDeliveryMan, setIsDeliveryMan] = useState(false);
+  const [hideNavBar, setHideNavBar] = useState(false);
   const cart = getCart();
+ // const history = useHistory();
+  
+  
 
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
@@ -50,6 +57,7 @@ function App() {
 
   // setReRender(!reRender);
 
+  
   async function isAuth(){
     try {
       const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/is-verify`, {
@@ -74,7 +82,10 @@ function App() {
 
   useEffect(() => {
     console.log("this is an admin", isAdmin)
+    
   }, [isAdmin])
+
+  
 
   
 
@@ -94,10 +105,18 @@ function App() {
       <ToastContainer />
       
       <Router>
-      <Navbar isAuthenticated={isAuthenticated} isAdmin={isAdmin} isDeliveryMan={isDeliveryMan} setAuth={setAuth} cartCounter={cartCounter} reRender={reRender} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} />
+        {
+          hideNavBar ? null : <Navbar isAuthenticated={isAuthenticated} isAdmin={isAdmin} isDeliveryMan={isDeliveryMan} setAuth={setAuth} cartCounter={cartCounter} reRender={reRender} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} />
+        }
+
+        
+        
         <Routes>
-          <Route exact path="/login" element={!isAuthenticated?  <Login setAuth={setAuth} /> : <Navigate to ="/" />} />
-          <Route exact path="/register" element={!isAuthenticated?  <Register setAuth={setAuth} /> : <Navigate to ="/" />} />
+          <Route exact path="/login" element={!isAuthenticated?  <Login setAuth={setAuth} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} /> : <Navigate to ="/" />} />
+          <Route exact path="/register" element={!isAuthenticated?  <Register setAuth={setAuth} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} /> : <Navigate to ="/" />} />
+          <Route exact path="/order/:order_id" element={isAuthenticated?  <OrderPage isAuthenticated={isAuthenticated} hideNavBar={hideNavBar} setHideNavBar={setHideNavBar} /> : <Navigate to ="/login" />} />
+          <Route exact path="/" element={isAuthenticated && isAdmin || isDeliveryMan?<AdminDeliveryManUi isAdmin={isAdmin} isDeliveryMan={isDeliveryMan} setAuth={setAuth} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} />:<Home isAuthenticated={isAuthenticated} setAuth={setAuth} hideNavBar={hideNavBar} setHideNavBar={setHideNavBar} />}/>
+
           <Route exact path="/dashboard" element={isAuthenticated?  <Dashboard setAuth={setAuth} /> : <Navigate to ="/login" />} />
           <Route exact path="/checkout" element={isAuthenticated?  <Checkout setAuth={setAuth} setReRender={setReRender} reRender={reRender} /> : <Navigate to ="/login" />} />
           {/* <Route exact path="/" element={<Navigate to="/login"/>} /> */}
@@ -106,15 +125,16 @@ function App() {
           <Route exact path="/filter" element={<FilterPage isAuthenticated={isAuthenticated} Category={''}/>}/>
           <Route exact path="/order/:order_id" element={isAuthenticated?  <OrderPage isAuthenticated={isAuthenticated} /> : <Navigate to ="/login" />} />
           <Route exact path="/techProducts" element={<TechProduct isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} />}/>       
-          <Route exact path="/product/:id" element={<Product isAuthenticated={isAuthenticated} isAdmin={isAdmin} />}/>
+          <Route exact path="/product/:id" element={<Product isAuthenticated={isAuthenticated} isAdmin={isAdmin} hideNavBar={hideNavBar} setHideNavBar={hideNavBar}  />}/>
           
           <Route exact path="/tracker/:tracker_id" element={isAuthenticated?  <TrackerPage isAuthenticated={isAuthenticated} /> : <Navigate to ="/login" />} />
-          <Route exact path="/" element={isAuthenticated && isAdmin || isDeliveryMan?<AdminDeliveryManUi isAdmin={isAdmin} isDeliveryMan={isDeliveryMan} setAuth={setAuth} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} />:<Home isAuthenticated={isAuthenticated} setAuth={setAuth} />}/>
+          <Route exact path="/" element={isAuthenticated && isAdmin || isDeliveryMan?<AdminDeliveryManUi isAdmin={isAdmin} isDeliveryMan={isDeliveryMan} setAuth={setAuth} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} />:<Home isAuthenticated={isAuthenticated} setAuth={setAuth} hideNavBar={hideNavBar} setHideNavBar={setHideNavBar} />}/>
           <Route exact path="/search" element={<Search isAuthenticated={isAuthenticated} />}/>
           <Route exact path="/wishlist" element={<Wishlist isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} />}/>
           <Route exact path="/cart" element={<Cart isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} setReRender={setReRender} />}/>
           <Route exact path="/user" element={isAuthenticated?  <UserPage isAuthenticated={isAuthenticated}  /> : <Navigate to ="/login" />} />
           <Route exact path="/about" element={<AboutUS />}/>
+          <Route exact path="/messages" element={ <MessagingInterface isAuthenticated={isAuthenticated} hideNavBar={hideNavBar} setHideNavBar={setHideNavBar} />} />
           <Route path="/*" element={<Navigate to="/error" />} />
         </Routes>
       </Router>

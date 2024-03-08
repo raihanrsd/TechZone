@@ -8,7 +8,7 @@ import logo from "../../image/login.png";
 import bg from "../../image/bg.png";
 import googleLogo from "../../image/google.png";
 
-const Login = ({setAuth}) => {
+const Login = ({setAuth, setIsAdmin, setIsDeliveryMan}) => {
 
     const [inputs, setInputs] = useState({
         email: "",
@@ -33,11 +33,14 @@ const Login = ({setAuth}) => {
             });
 
             const parseRes = await response.json();
-            // console.log(parseRes);
+            console.log(parseRes);
             if (parseRes.token) {
                 localStorage.setItem("token", parseRes.token);
                 setAuth(true);
+                setIsAdmin(parseRes.isAdmin);
+                setIsDeliveryMan(parseRes.isDeliveryMan);
                 // console.log("Login Successfully")
+                
                 toast.success("Logged in Successfully");
             }
             else {

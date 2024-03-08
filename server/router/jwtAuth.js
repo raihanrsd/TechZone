@@ -43,17 +43,25 @@ router.post('/register', validInfo, async (req, res) => {
         // res.json(newUser.rows[0]);
 
         // 5. generating our jwt token
+        if(staff_status === 'customer'){
+            await pool.query(`CALL assign_customer_service_admin($1)`, [newUser.rows[0].user_id]);
+        }
+        
 
         const token = jwtGenerator(newUser.rows[0].user_id);
         res.json({
             token,
-            message : "User Registered Successfully!"
+            message : "User Registered Successfully!",
+            isAdmin: staff_status === 'admin' ? true : false,
+            isDeliveryMan: staff_status === 'delivery_man' ? true : false,
         });
 
     }
     catch(err){
         console.error(err.message);
-        res.status(500).send('Server Error');
+        res.status(500).send({
+            message: 'Server Error'
+        });
     }
 })
 
@@ -64,7 +72,7 @@ router.post('/login', validInfo, async (req, res) => {
         // 1. destructure the req.body
 
         const { email, password } = req.body;
-
+        // console.log('ei dhuruuuuu');
         // 2. check if user doesn't exist (if not then we throw error)
 
         const user = await pool.query('SELECT * FROM general_user WHERE email = $1', [email]);
@@ -72,7 +80,7 @@ router.post('/login', validInfo, async (req, res) => {
         if(user.rows.length === 0){
             return res.status(401).json('Password or Email is incorrect');
         }
-
+        
         // 3. check if incoming password is the same as database password
 
         const validPassword = await bcrypt.compare(password, user.rows[0].password);
@@ -84,7 +92,13 @@ router.post('/login', validInfo, async (req, res) => {
         // 4. give them the jwt token
 
         const token = jwtGenerator(user.rows[0].user_id);
-        res.json({token});
+        // console.log(token);
+        res.json({
+            token : token,
+            message: "Login Successful",
+            isAdmin: user.staff_status === 'admin' ? true : false,
+            isDeliveryMan: user.staff_status === 'delivery_man' ? true : false,
+        });
 
     }
     catch(err){

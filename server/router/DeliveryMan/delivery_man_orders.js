@@ -41,7 +41,9 @@ router.post('/accept_order', authorization, async(req, res, next) => {
             INSERT INTO order_delivery_man VALUES($1, $2);
         `
         // console.log(order_id, user_id);
+
         await pool.query(sql, [user_id, order_id]);
+        await pool.query('CALL delivery_man_message($1, $2)', [user_id, order_id]);
         res.json({
             message: 'Order accepted successfully',
             accepted: true

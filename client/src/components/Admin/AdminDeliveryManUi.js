@@ -1,6 +1,6 @@
 
 import React, { Fragment,useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,12 +13,23 @@ import DMAnalytics from './DMAnalytics';
 import AssignedOrders from './AssignedOrders';
 import CompletedOrders from './CompletedOrders';
 import DMProfile from './DMProfile';
+import AdminAnalytics from './AdminAnalytics';
+import AddProducts from './AddProduct';
+import ShowProducts from '../Products/showAllProducts';
+import ShowAllCategories from '../Products/showAllCategories';
+import AddCategory from './AddCategories';
+import AllOrders from './AllOrders';
+import AdminPromos from './AdminPromos';
+import AllAdmins from './AllAdmins';
+import NoticeBoard from './NoticeBoard';
+import AllUsers from './AllUsers';
+import AllDeliveryMan from './AllDeliveryMan';
 
 
 const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsDeliveryMan}) =>{
     const [user, setUser] = useState({});
     const [pageState, setPageState] = useState(1);
-
+    const navigate = useNavigate();
 
     useEffect(()=>{
         const getUser = async () => {
@@ -92,6 +103,9 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
                             <button className='bar-buttons' onClick={() => changePageState(4)}>
                                 Completed Orders 
                             </button>
+                            <button className='bar-buttons' onClick={() => navigate('/messages')}>
+                                Messages
+                            </button>
                             <button className='bar-buttons' onClick={() => changePageState(5)}>
                                 Profile
                             </button>
@@ -103,29 +117,45 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
                         ) ||
                         isAdmin && (
                             <Fragment>
-                            <h2>Admin Dashboard</h2>
+                            <div className='bar-content-div'>
+                            <h2 className='dashboard-heading'>Admin Dashboard</h2>
+                            <hr className='bar-div-hr'></hr>
+                            
                             <img src={UserImg} className='profile-img' />
-                            <button className='bar-buttons'>
+                            
+                            <h2 className='profile-heading'>{user.username}</h2>
+                            <hr className='bar-div-hr'></hr>
+                            <button className='bar-buttons' onClick={() => changePageState(1)}>
                                 Analytics
                             </button>
-                            <button className='bar-buttons'>
-                                Manage Products
+                            <button className='bar-buttons' onClick={() => changePageState(2)}>
+                                Products
                             </button>
-                            <button className='bar-buttons'>
-                                Manage Categories
+                            <button className='bar-buttons' onClick={() => changePageState(3)}>
+                                Categories
                             </button>
-                            <button className='bar-buttons'>
-                                Manage Users
+                            <button className='bar-buttons' onClick={() => changePageState(4)}>
+                                Orders
                             </button>
-                            <button className='bar-buttons'>
-                                Manage Orders
+                            <button className='bar-buttons' onClick={() => changePageState(5)}>
+                                Promos
                             </button>
-                            <button className='bar-buttons'>
-                                Manage Delivery Man
+                            <button className='bar-buttons' onClick={() => changePageState(6)}>
+                                Notice Board
                             </button>
-                            <button className='bar-buttons'>
-                                Manage Admins
+                            <button className='bar-buttons' onClick={() => changePageState(7)}>
+                                Admins
                             </button>
+                            <button className='bar-buttons' onClick={() => changePageState(8)}>
+                                Delivery Man
+                            </button>
+                            <button className='bar-buttons' onClick={() => changePageState(9)}>
+                                Customer
+                            </button>
+                            <button className='bar-buttons' onClick={() => logOut()}>
+                                Log Out
+                            </button>
+                            </div>
                             </Fragment>
 
                         )
@@ -133,8 +163,29 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
                 </div>
                 <div className='content-div'>
                     {
+                        isAdmin && (
+                            pageState === 1 && <AdminAnalytics /> ||
+                            pageState === 2 && <Fragment>
+                                    <AddProducts />
+                                    <ShowProducts />
+                                 </Fragment> ||
+                            pageState === 3 && <Fragment> 
+                                    <AddCategory />
+                                    <ShowAllCategories />
+                                </Fragment> ||
+                            pageState === 4 && <AllOrders /> ||
+                            pageState === 5 && <AdminPromos /> ||
+                            pageState === 6 && <NoticeBoard /> ||
+                            pageState === 7 && <AllAdmins /> ||
+                            pageState === 8 && <AllDeliveryMan /> ||
+                            pageState === 9 && <AllUsers />
+                            
+                        )
+                    }
+
+{
                         isDeliveryMan && (
-                            pageState === 1 && <DMAnalytics /> ||
+                            pageState === 1 && <AdminAnalytics /> ||
                             pageState === 2 && <AvailableOrders /> ||
                             pageState === 3 && <AssignedOrders /> ||
                             pageState === 4 && <CompletedOrders /> ||

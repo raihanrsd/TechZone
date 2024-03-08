@@ -6,12 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-const DMProfile = () =>{
+const NoticeBoard = () =>{
     return (
         <Fragment>
-            <h1> Profile Page</h1>
+            <h1>Notice Board</h1>
         </Fragment>
     )
 }
 
-export default DMProfile;
+export default NoticeBoard;

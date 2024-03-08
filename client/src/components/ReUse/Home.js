@@ -7,18 +7,31 @@ import ".././css/home.css";
 import ".././css/AboutUS.css"
 
 import laptop from "../../image/laptop.png";
+
 import phone from "../../image/Iphone.jpg";
 import headphone from "../../image/headset5.jpg";
 import webLogo from "../../image/WebLOGO.png";
+
+
+import ChatImg from "../../image/comments.png";
 
 
 import ProductSlider from "../Products/productSlider";
 import PageFooter from "./PageFooter";
 import FilterPage from "../filter/filterPage";
 
-export default function Home({isAuthenticated, setAuth}) {
+
+export default function Home({isAuthenticated, setAuth, hideNavBar, setHideNavBar}) {
   const [products, setProducts] = useState([]);
   const number = 5;
+
+  const navigate = useNavigate();
+  const showMessages = () => {
+    setHideNavBar(!hideNavBar);
+    navigate('/messages');
+
+  }
+
   useEffect(() =>{
     const getFeaturedProduct = async() =>{
         try{
@@ -35,7 +48,6 @@ export default function Home({isAuthenticated, setAuth}) {
             console.log(err.message)
         }
     }
-
     getFeaturedProduct();
 }, [])
 
@@ -201,8 +213,12 @@ const handleClick = (category) => {
 
 
         {/* Footer --> subject to change */}
+
         <PageFooter />
-        
+        <div className='chat-btn'>
+          <img src={ChatImg} onClick={showMessages} className="chat-icon" />
+
+        </div>
     </Fragment>
   );
 }
