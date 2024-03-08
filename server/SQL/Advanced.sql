@@ -205,3 +205,10 @@ SELECT G.*, D.* FROM general_user G
 LEFT JOIN delivery_man D ON G.user_id = D.user_id 
 WHERE G.user_id IN (SELECT DISTINCT user_id 
 FROM order_delivery_man WHERE order_id = 71);
+
+
+
+-- top sold product in a time line
+
+SELECT O.*, OP.* FROM orders O JOIN order_product OP ON O.order_id = OP.order_id
+WHERE O.order_time BETWEEN '2024-01-01' AND '2024-12-31';

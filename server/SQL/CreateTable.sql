@@ -24,6 +24,7 @@ CREATE TABLE admin (
     user_id uuid PRIMARY KEY,
     clearance_level VARCHAR(50) NOT NULL,
     is_employed BOOLEAN DEFAULT TRUE,
+    hire_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES general_user(user_id) ON DELETE CASCADE
 );
 

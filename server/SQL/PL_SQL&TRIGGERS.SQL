@@ -194,6 +194,32 @@ $$;
 
 
 
+-- Function 1
+-- finding out the total products sold for some day interval for each day
+CREATE OR REPLACE FUNCTION get_product_sold_count(start_date DATE, end_date DATE)
+RETURNS TABLE (date_sold DATE, total_products_sold BIGINT) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT
+        d::DATE AS date_sold,
+        COUNT(op.product_id) AS total_products_sold
+    FROM
+        generate_series(start_date, end_date, interval '1 day') d
+    LEFT JOIN
+        orders o ON d::DATE = o.date_added
+    LEFT JOIN
+        order_product op ON o.order_id = op.order_id
+    GROUP BY
+        d::DATE
+    ORDER BY
+        d::DATE;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
 
 
 

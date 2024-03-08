@@ -20,6 +20,8 @@ router.use('/delete', delete_category_product);
 router.use('/update', update_product);
 router.use('/upload/product/images', upload_product_images);
 router.use('/all_orders', require('./Admin/all_orders'));
+router.use('/all', require('./Admin/admins'));
+router.use('/analytics', require('./Admin/Analytics'));
 
 
 module.exports = router;
