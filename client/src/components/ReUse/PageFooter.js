@@ -11,15 +11,16 @@ const PageFooter = () => {
           <div class="col-sm-12 col-md-6">
             <h6>About</h6>
             <p class="text-justify">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book...
+              This is where innovation meets convenience! Prioritizing your needs, we
+              offer premium gadgets and electronics. Our commitment includes
+              providing a user-friendly environment and a reliable payment
+              gateway system. With our top-quality products,...
               <Link
-                    to=""
+                    to="/about"
                     style={{ color: 'lightblue', margin: '7px',textDecoration: 'none', transition: 'color 0.3s ease' }}
                     onMouseEnter={(e) => e.target.style.color = '#007FFF'}
                     onMouseLeave={(e) => e.target.style.color = 'lightblue'}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                     Read More
                 </Link>

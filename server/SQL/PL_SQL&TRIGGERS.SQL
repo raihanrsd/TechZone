@@ -60,7 +60,7 @@ $$ LANGUAGE plpgsql;
 
 -- Create a trigger to call the function after an insert on the orders table
 CREATE TRIGGER tracker_progress_update
-AFTER UPDATE ON tracker OF progress
+AFTER UPDATE ON tracker
 FOR EACH ROW
 EXECUTE FUNCTION update_order_payment();
 

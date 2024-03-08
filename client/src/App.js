@@ -12,6 +12,7 @@ import Register from './components/Authentication/Register';
 
 
 import Home from './components/ReUse/Home';
+import AboutUS from './components/ReUse/AboutUS';
 
 import Navbar from './components/ReUse/Navbar';
 import AddPage from './components/Admin/AddPage';
@@ -113,6 +114,7 @@ function App() {
           <Route exact path="/wishlist" element={<Wishlist isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} />}/>
           <Route exact path="/cart" element={<Cart isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} setReRender={setReRender} />}/>
           <Route exact path="/user" element={isAuthenticated?  <UserPage isAuthenticated={isAuthenticated}  /> : <Navigate to ="/login" />} />
+          <Route exact path="/about" element={<AboutUS />}/>
           <Route path="/*" element={<Navigate to="/error" />} />
         </Routes>
       </Router>
@@ -121,3 +123,5 @@ function App() {
 }
 
 export default App;
+
+

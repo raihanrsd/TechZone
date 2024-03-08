@@ -58,7 +58,7 @@ const Login = ({setAuth}) => {
         <Fragment>
             
 
-            <div class="container d-flex justify-content-center align-items-center min-vh-100" >
+            <div class="d-flex justify-content-center align-items-center min-vh-100" style={{marginTop: "100px", backgroundColor: "lavender"}}>
             
 
             <div class="row border rounded-5 p-3 bg-white shadow box-area">
