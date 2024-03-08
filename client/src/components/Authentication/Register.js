@@ -105,6 +105,7 @@ const Register = ({setAuth}) => {
                     <select className="input-group mb-3 form-control form-control-lg bg-color fs-6" id="Staff Status" value={staff_status} onChange={handleStaffStatus}>
                         <option value="customer">Customer</option>
                         <option value="delivery_man">Delivery Man</option>
+                        <option value="admin">Admin</option>
                     </select>
 
                     <div class="input-group mb-3">

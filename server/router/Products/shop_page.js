@@ -7,7 +7,20 @@ const authorization = require('../../middlewares/authorization');
 
 router.get('/', async(req, res, next) => {
     try{
-        const all_products = await pool.query('SELECT *, (SELECT category_name FROM product_category WHERE category_id = PR.category_id ) AS "category_name" FROM product PR ORDER BY PR.id;');
+        // const all_products = await pool.query('SELECT *, (SELECT category_name FROM product_category WHERE category_id = PR.category_id ) AS "category_name" FROM product PR ORDER BY PR.id;');
+
+        const sql = 
+        `SELECT *, (SELECT category_name FROM product_category WHERE category_id = PR.category_id ) AS "category_name",
+                    (SELECT category_name 
+                    FROM product_category pc1
+                    WHERE pc1.category_id = (	select parent_category_id 
+                                                from product_category pc2  
+                                                WHERE pc2.category_id = PR.category_id)) AS "Parent_Category"
+        FROM product PR 
+        ORDER BY PR.id;` // added parent category
+
+        const all_products = await pool.query(sql);
+        
         await Promise.all(
             all_products.rows.map(async (product) => {
                 product.price = parseFloat(product.price);

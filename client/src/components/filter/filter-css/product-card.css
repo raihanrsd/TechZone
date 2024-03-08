@@ -1,0 +1,6 @@
+.card-body button:hover{
+    background-color: lavender;
+}
+.specs li::marker{
+    color: red;
+}

@@ -65,7 +65,6 @@ CREATE TABLE product (
     FOREIGN KEY (category_id) REFERENCES product_category(category_id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE product_review (
     review_id SERIAL PRIMARY KEY,
     user_id uuid NOT NULL,

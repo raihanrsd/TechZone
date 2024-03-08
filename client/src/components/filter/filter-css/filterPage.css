@@ -1,0 +1,10 @@
+body {
+    background-color: #ececec;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .side-product{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }

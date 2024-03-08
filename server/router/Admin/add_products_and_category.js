@@ -19,7 +19,7 @@ const product_add = router.post("/product", async (req, res, next) => {
             product_status,
             specs
           } = req.body;
-        
+        console.log(product_name, price, previous_price, product_description, product_exerpt, category_id, product_img, visibility_status, discount_status, discount, product_status, specs)
         const product = await pool.query("SELECT * FROM product WHERE product_name = $1 AND category_id = $2", [product_name, category_id]);
 
         if(product.rows.length !== 0){

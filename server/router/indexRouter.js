@@ -24,6 +24,19 @@ router.get('/', authorization, async(req, res, next) => {
   }
 });
 
+// filter page routers
+
+router.use('/category', require('./filter/allCategory'));
+
+router.use('/maxPrice', require('./filter/maxPrice'));
+
+router.use('/allFilter', require('./filter/allFilter'));
+
+router.use('/attribute', require('./filter/allAttriubute'));
+
+
+// others
+
 router.use('/shop', require('./Products/shop_page'));
 
 router.use('/categories', require('./Products/all_categories'));

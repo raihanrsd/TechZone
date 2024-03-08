@@ -30,6 +30,8 @@ import OrderPage from './components/Order/order';
 import ErrorPage from './components/ReUse/Error';
 import TrackerPage from './components/Order/Tracker';
 
+import FilterPage from './components/filter/filterPage';
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const cart = getCart();
@@ -79,6 +81,7 @@ function App() {
           {/* <Route exact path="/" element={<Navigate to="/login"/>} /> */}
           <Route exact path="/admin" element={<AddPage />}/>
           <Route exact path="/error" element={<ErrorPage />}/>
+          <Route exact path="/filter" element={<FilterPage isAuthenticated={isAuthenticated} Category={''}/>}/>
           <Route exact path="/techProducts" element={<TechProduct isAuthenticated={isAuthenticated} />}/>       
           <Route exact path="/product/:id" element={<Product isAuthenticated={isAuthenticated} />}/>
           <Route exact path="/order/:order_id" element={isAuthenticated?  <OrderPage isAuthenticated={isAuthenticated} /> : <Navigate to ="/login" />} />

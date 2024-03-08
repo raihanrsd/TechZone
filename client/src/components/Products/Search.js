@@ -26,6 +26,7 @@ const Search = () => {
                 setCategories(parseRes);
                 console.log(categories);
             } catch (error) {
+                console.log('Error fetching categories');
                 console.error(error.message);
             }
         };
@@ -48,7 +49,7 @@ const Search = () => {
             }
             catch (err){
                 console.log(err.message)
-
+                console.log('Error fetching specs');
             }
         }
 

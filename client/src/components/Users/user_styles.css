@@ -1,20 +1,44 @@
 
-
-button {
-    background-color: #4CAF50;
+.User-Profile{
+  height: 660px;
+  align-items : center;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.User-form{
+  width: 800px;
+  margin-right: 30px;
+}
+.user_icon{
+  margin-left: 30px;
+  margin-right: 100px;
+  color: rgb(24, 33, 188);
+  border: 1px solid rgb(24, 33, 188);
+  border-radius: 50%;
+}
+.form-control{
+  background-color: #ececec;
+}
+.update-info, .normalbtn, .cancelbtn {
+    background-color: rgb(24, 33, 188);
     color: white;
     padding: 14px 20px;
     margin: 8px 0px;
     border: none;
     cursor: pointer;
     width: 100%;
+    border-radius: 20px;
   }
   
-  button:hover {
-    opacity: 0.8;
+  .update-info:hover {
+    background-color: purple;
   }
 
   .normalbtn {
+    border-radius: 20px;
     padding: 10px 18px;
     margin-right: 10px;
   }
@@ -34,9 +58,66 @@ button {
   
   .cancelbtn {
     padding: 10px 18px;
+    border-radius: 20px;
     background-color: #f44336;
   }
+  .cancelbtn:hover {
+    background-color: #da190b;
+  }
   
+  .user_page_btn1, .user_page_btn2 , .user_page_btn3, .user_page_btn4{
+    height: 220px;
+    width: 300px; 
+    border-radius: 20px;
+    border: 0px; 
+    font-size: 24px;
+    font-weight: '1000';
+    color: #ececec;
+    cursor: pointer;
+  }
+
+  /* .user_page_btn1{
+    background-image: linear-gradient(to right, purple, red);
+  }
+  .user_page_btn2{
+    background-image: linear-gradient(to right, red, violet);
+  }
+  .user_page_btn3{
+    background-image: linear-gradient(to right, violet, blue);
+  }
+  .user_page_btn4{
+    background-image: linear-gradient(to right, blue, purple);
+  } */
+  .user_page_btn1{
+    background-image: linear-gradient(to right,  rgb(24, 33, 188), purple);
+  }
+  .user_page_btn1:hover{
+    transition: transform 0.5s ease;
+    transform: scale(1.05);
+  }
+  .user_page_btn2{
+    background-image: linear-gradient(to right, purple,  rgb(24, 33, 188));
+  }
+  .user_page_btn2:hover{
+    transition: transform 0.5s ease;
+    transform: scale(1.05);
+  }
+  .user_page_btn3{
+    background-image: linear-gradient(to right,  rgb(24, 33, 188), purple);
+  }
+  .user_page_btn3:hover{
+    transition: transform 0.5s ease;
+    transform: scale(1.05);
+  }
+  .user_page_btn4{
+    background-image: linear-gradient(to right, purple,  rgb(24, 33, 188));
+  }
+  .user_page_btn4:hover{
+    transition: transform 0.5s ease;
+    transform: scale(1.05);
+  }
+
+  /* others */
   .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;

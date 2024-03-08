@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaUserCircle } from "react-icons/fa";
 
 const UserPage = () => {
   const [user, setUser] = useState({
@@ -78,84 +79,89 @@ const UserPage = () => {
 
   return (
     <Fragment>
-      <div className="container">
-        <h1 className="text-center mt-5">User Profile</h1>
-        <form>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              className="form-control"
-              id="username"
-              value={user?.username|| ''}
-              readOnly={!editMode}
-              onChange={(e) => setUser({ ...user, username: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              value={user.email}
-              readOnly={!editMode}
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="contact_no">Contact No</label>
-            <input
-              type="text"
-              className="form-control"
-              id="contact_no"
-              value={user.contact_no}
-              readOnly={!editMode}
-              onChange={(e) => setUser({ ...user, contact_no: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="full_name">Full Name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="full_name"
-              value={user.full_name}
-              readOnly={!editMode}
-              onChange={(e) => setUser({ ...user, full_name: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="gender">Gender</label>
-            
-              <select
-                className='form-control'
-                disabled={!editMode}
-                id="gender"
-                value={user.gender}
-                onChange={(e) => setUser({ ...user, gender: e.target.value })}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-          </div>
-          {
-            editMode && (
-                <div className='form-group btn_div'>
-                <button type="button" className="normalbtn" onClick={handleSubmit}>Submit</button>
-                <button type="button" className="cancelbtn" onClick={handleCancel}>Cancel</button>
-                </div>
-            )
-          }
-          
-        </form>
-      </div>
+      <div className="User-Profile">
+        
+        <FaUserCircle size={300} className="user_icon" />
 
-        <div className="container" >
+          <div className="User-form">
+          <h1 className="text-center mt-5">User Profile</h1>
+          <form>
+            <div className="form-group">
+              <label htmlFor="username" style={{fontWeight: '600'}}>Username</label>
+              <input
+                type="text"
+                className="form-control"
+                id="username"
+                value={user?.username|| ''}
+                readOnly={!editMode}
+                onChange={(e) => setUser({ ...user, username: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email" style={{fontWeight: '600'}}>Email</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                value={user.email}
+                readOnly={!editMode}
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="contact_no" style={{fontWeight: '600'}}>Contact No</label>
+              <input
+                type="text"
+                className="form-control"
+                id="contact_no"
+                value={user.contact_no}
+                readOnly={!editMode}
+                onChange={(e) => setUser({ ...user, contact_no: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="full_name" style={{fontWeight: '600'}}>Full Name</label>
+              <input
+                type="text"
+                className="form-control"
+                id="full_name"
+                value={user.full_name}
+                readOnly={!editMode}
+                onChange={(e) => setUser({ ...user, full_name: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="gender" style={{fontWeight: '600'}}>Gender</label>
+              
+                <select
+                  className='form-control'
+                  disabled={!editMode}
+                  id="gender"
+                  value={user.gender}
+                  onChange={(e) => setUser({ ...user, gender: e.target.value })}>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+            </div>
             {
-                !editMode && <button onClick={handleUpdate}>Update Info</button>
+              editMode && (
+                  <div className='form-group btn_div'>
+                  <button type="button" className="normalbtn" onClick={handleSubmit}>Submit</button>
+                  <button type="button" className="cancelbtn" onClick={handleCancel}>Cancel</button>
+                  </div>
+              )
             }
             
-        </div>
+          </form>
+
+          <div className="container" >
+              {
+                  !editMode && <button onClick={handleUpdate} className="update-info">Update Info</button>
+              }
+              
+          </div>
+        </div>        
+      </div>
     </Fragment>
   );
 };

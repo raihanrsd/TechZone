@@ -8,6 +8,9 @@
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* Adjust values for the shadow effect */
 	filter: brightness(70%); /* Adjust the brightness percentage */
 }  
+.custom-shadow {
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Adjust values for the shadow effect */
+}
 .carousel-item {
 	height: 100vh;
 	min-height: 300px;
