@@ -12,7 +12,6 @@ const Register = ({setAuth, setIsAdmin, setIsDeliveryMan}) => {
         password: "",
         confirmed_password: "",
         contact_no: "",
-        profile_img: "",
         full_name: "",
         gender: "",
         staff_status: "customer"
@@ -33,7 +32,7 @@ const Register = ({setAuth, setIsAdmin, setIsDeliveryMan}) => {
                 alert("Passwords do not match");
             }
             
-            const body = {username, email, password, confirmed_password, contact_no, profile_img, full_name, gender, staff_status};
+            const body = {username, email, password, confirmed_password, contact_no, profile_img : 'user.png', full_name, gender, staff_status};
             console.log(body);
             const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/register`, {
                 method: "POST",
@@ -98,9 +97,6 @@ const Register = ({setAuth, setIsAdmin, setIsDeliveryMan}) => {
                     </div>
                     <div class="input-group mb-3">
                         <input type="text" name="contact_no" placeholder="Contact No." className="form-control form-control-lg bg-color fs-6" value={contact_no} onChange={e => onChange(e)} />
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" name="profile_img" placeholder="Profile Image" className="form-control form-control-lg bg-color fs-6" value={profile_img} onChange={e => onChange(e)} />
                     </div>
                     <div class="input-group mb-3">
                     <input type="text" name="full_name" placeholder="Full Name"className="form-control form-control-lg bg-color fs-6" value={full_name} onChange={e => onChange(e)} />

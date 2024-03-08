@@ -157,7 +157,10 @@ const handleClick = (category) => {
         {/* Footer --> subject to change */}
 
         <PageFooter />
-        
+        <div className='chat-btn'>
+          <img src={ChatImg} onClick={showMessages} className="chat-icon" />
+
+        </div>
     </Fragment>
   );
 }

@@ -19,6 +19,11 @@ import ShowProducts from '../Products/showAllProducts';
 import ShowAllCategories from '../Products/showAllCategories';
 import AddCategory from './AddCategories';
 import AllOrders from './AllOrders';
+import AdminPromos from './AdminPromos';
+import AllAdmins from './AllAdmins';
+import NoticeBoard from './NoticeBoard';
+import AllUsers from './AllUsers';
+import AllDeliveryMan from './AllDeliveryMan';
 
 
 const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsDeliveryMan}) =>{
@@ -135,16 +140,16 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
                             <button className='bar-buttons' onClick={() => changePageState(5)}>
                                 Promos
                             </button>
-                            <button className='bar-buttons' onClick={() => changePageState(5)}>
+                            <button className='bar-buttons' onClick={() => changePageState(6)}>
                                 Notice Board
                             </button>
-                            <button className='bar-buttons' onClick={() => changePageState(5)}>
+                            <button className='bar-buttons' onClick={() => changePageState(7)}>
                                 Admins
                             </button>
-                            <button className='bar-buttons' onClick={() => changePageState(5)}>
+                            <button className='bar-buttons' onClick={() => changePageState(8)}>
                                 Delivery Man
                             </button>
-                            <button className='bar-buttons' onClick={() => changePageState(5)}>
+                            <button className='bar-buttons' onClick={() => changePageState(9)}>
                                 Customer
                             </button>
                             <button className='bar-buttons' onClick={() => logOut()}>
@@ -159,7 +164,7 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
                 <div className='content-div'>
                     {
                         isAdmin && (
-                            pageState === 1 && <DMAnalytics /> ||
+                            pageState === 1 && <AdminAnalytics /> ||
                             pageState === 2 && <Fragment>
                                     <AddProducts />
                                     <ShowProducts />
@@ -169,7 +174,12 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
                                     <ShowAllCategories />
                                 </Fragment> ||
                             pageState === 4 && <AllOrders /> ||
-                            pageState === 5 && <DMProfile />
+                            pageState === 5 && <AdminPromos /> ||
+                            pageState === 6 && <NoticeBoard /> ||
+                            pageState === 7 && <AllAdmins /> ||
+                            pageState === 8 && <AllDeliveryMan /> ||
+                            pageState === 9 && <AllUsers />
+                            
                         )
                     }
 
