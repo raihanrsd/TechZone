@@ -57,8 +57,9 @@
     background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     padding: 10px;
-    color: black;
+    color: white;
     margin-bottom: 15px;
+    z-index: 100;
 }
 
 .dashboard-heading{
@@ -77,6 +78,7 @@
     transform: translate(-50%, -50%);
     color: #fff;
     text-align: center;
+    overflow-y: scroll;
     z-index: 100; /* Place the content above the overlay */
 }
 

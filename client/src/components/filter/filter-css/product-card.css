@@ -4,3 +4,8 @@
 .specs li::marker{
     color: red;
 }
+
+.specs{
+    height: 100px !important;
+    overflow-y: scroll;
+}

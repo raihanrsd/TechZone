@@ -2,7 +2,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-
     align-items: center;
     padding: 20px;
     z-index: 999;
@@ -23,3 +22,5 @@
 .pageination-container{
     margin-top: 20px;
 }
+
+

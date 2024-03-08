@@ -1,22 +1,35 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import ".././css/home.css";
 
 import laptop from "../../image/laptop.png";
+
 import phone from "../../image/Iphone.jpg";
 import headphone from "../../image/headset5.jpg";
+
+
+import ChatImg from "../../image/comments.png";
 
 
 import ProductSlider from "../Products/productSlider";
 import PageFooter from "./PageFooter";
 import FilterPage from "../filter/filterPage";
 
-export default function Home({isAuthenticated, setAuth}) {
+
+export default function Home({isAuthenticated, setAuth, hideNavBar, setHideNavBar}) {
   const [products, setProducts] = useState([]);
   const number = 5;
+
+  const navigate = useNavigate();
+  const showMessages = () => {
+    setHideNavBar(!hideNavBar);
+    navigate('/messages');
+
+  }
+
   useEffect(() =>{
     const getFeaturedProduct = async() =>{
         try{
@@ -33,7 +46,6 @@ export default function Home({isAuthenticated, setAuth}) {
             console.log(err.message)
         }
     }
-
     getFeaturedProduct();
 }, [])
 
@@ -143,6 +155,7 @@ const handleClick = (category) => {
 
 
         {/* Footer --> subject to change */}
+
         <PageFooter />
         
     </Fragment>

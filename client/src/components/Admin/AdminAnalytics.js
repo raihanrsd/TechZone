@@ -6,12 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-const DMProfile = () =>{
+const AdminAnalytics = () =>{
     return (
         <Fragment>
-            <h1> Profile Page</h1>
+            <h1> Analytics</h1>
         </Fragment>
     )
 }
 
-export default DMProfile;
+export default AdminAnalytics;

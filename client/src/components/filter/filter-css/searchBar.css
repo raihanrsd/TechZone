@@ -27,7 +27,7 @@
     width: 490px;
     height: 35px;
     border: none;
-    background: #ececec;
+    background-color: #ececec !important;
     outline: none;
     margin-right: 10px;
     border-radius: 20px;

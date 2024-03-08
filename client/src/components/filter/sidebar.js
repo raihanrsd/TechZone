@@ -116,8 +116,9 @@ export default function Sidebar({products, setProducts, searchInput, sortBy, sor
                 let updatedIsDropdownOpen = {};
     
                 data.forEach((attr) => {
-                    const attrName = attr.attribute_name;
+                    const attrName = attr.attribute_name.trim();
                     const attrValue = attr._value;
+                    
                     const attrCategory = attr.category_name;
     
                     if(!updatedAttributes[attrName]){
@@ -125,7 +126,10 @@ export default function Sidebar({products, setProducts, searchInput, sortBy, sor
                         updatedSelectedAttributes[attrName] = [];
                         updatedIsDropdownOpen[attrName] = true;
                     }
-                    updatedAttributes[attrName].push({attrValue, attrCategory});
+                    if(attrValue !== null || attrValue !== ""){
+                        updatedAttributes[attrName].push({attrValue, attrCategory});
+                    }
+                    
                     // updatedAttributes[attrName].push(attrValue);
                 });
                 
@@ -219,42 +223,42 @@ export default function Sidebar({products, setProducts, searchInput, sortBy, sor
     // function implemented to give the margins to the dropdowns non dynamically, their should be a better way to do this
     const marginSize = (attribute) =>
     {
-        if(attribute === "Battery Capacity")
-        {
-            return 60;
-        }
-        else if(attribute === "Camera")
-        {
-            return 190;
-        }
-        else if(attribute === "Color")
-        {
-            return 670;
-        }
-        else if(attribute === "Connectivity")
-        {
-            return 90;
-        }
-        else if(attribute === "Display")
-        {
-            return 440;
-        }
-        else if(attribute === "Noise Cancellation")
-        {
-            return 90;
-        }
-        else if(attribute === "Processor")
-        {
-            return 570;
-        }
-        else if(attribute === "RAM")
-        {
-            return 160;
-        }
-        else if(attribute === "Storage")
-        {
-            return 370;
-        }
+        // if(attribute === "Battery Capacity")
+        // {
+        //     return 60;
+        // }
+        // else if(attribute === "Camera")
+        // {
+        //     return 190;
+        // }
+        // else if(attribute === "Color")
+        // {
+        //     return 670;
+        // }
+        // else if(attribute === "Connectivity")
+        // {
+        //     return 90;
+        // }
+        // else if(attribute === "Display")
+        // {
+        //     return 440;
+        // }
+        // else if(attribute === "Noise Cancellation")
+        // {
+        //     return 90;
+        // }
+        // else if(attribute === "Processor")
+        // {
+        //     return 570;
+        // }
+        // else if(attribute === "RAM")
+        // {
+        //     return 160;
+        // }
+        // else if(attribute === "Storage")
+        // {
+        //     return 370;
+        // }
     }
 
     if(isLoading || maxPrice === null){
@@ -293,7 +297,7 @@ export default function Sidebar({products, setProducts, searchInput, sortBy, sor
                     </div>
                 </div>
                 
-                <div className="side-box-price" style={{ marginTop: isDropdownCategoryOpen ? '120px' : '0px' , marginBottom: isDropdownPriceOpen ? '135px' : '0px' }}>
+                <div className="side-box-price" >
                     <div className="dropdown"> {/* Price dropdown */}
                         <button className="dropdown-toggle" onClick={toggleDropdownPrice}>
                             Price Range

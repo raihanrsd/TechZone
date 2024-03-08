@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 import "../css/login.css";
 import logo from "../../image/login.png";
 
-const Register = ({setAuth}) => {
+const Register = ({setAuth, setIsAdmin, setIsDeliveryMan}) => {
     const [inputs, setInputs] = useState({
         username: "",
         email: "",
@@ -46,11 +46,14 @@ const Register = ({setAuth}) => {
 
             if(parseRes.token){
                 localStorage.setItem("token", parseRes.token);
+                setIsAdmin(parseRes.isAdmin);
+                setIsDeliveryMan(parseRes.isDeliveryMan);
                 setAuth(true);
                 // console.log("Registered Successfully")
                 toast.success("You are Registered Successfully");
             }
             else{
+                
                 setAuth(false);
                 console.log(parseRes);
                 toast.error(parseRes);
