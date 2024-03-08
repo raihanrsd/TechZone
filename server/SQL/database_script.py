@@ -9,8 +9,8 @@ import random
 csv_file_path = 'Mobile.csv'
 connection = psycopg2.connect(
     dbname="techzone",
-    user="techzone_admin",
-    password="123456789",
+    user="postgres",
+    password="123456",
     host="localhost",
     port="5432"
 )
@@ -41,7 +41,7 @@ cursor = connection.cursor()
 #         insert_query = sql.SQL("""
 #             INSERT INTO product_category (category_name, parent_category_id, category_description, category_img)
 #             VALUES ({}, {}, 'This is a category Description', 'category_img.png')
-#         """).format(sql.Literal(brand_name), sql.Literal(2))
+#         """).format(sql.Literal(brand_name), sql.Literal(83))
         
 #         cursor.execute(insert_query)
 
@@ -55,7 +55,8 @@ fake = Faker()
 
 # def insert_product_and_attributes(model, category_id, rows):
 #     # Find the minimum selling price for the model
-#     min_selling_price = min(float(row['Selling Price']) for row in rows)
+#     min_selling_price = min(float(row['Selling Price']) if row['Selling Price'] else float('0.0') for row in rows)
+
 #     min_original_price = min(
 #         float(row['Original Price']) if row['Original Price'] else min_selling_price + float('100')
 #         for row in rows
@@ -117,11 +118,10 @@ fake = Faker()
 #             for _value in values:
 #                 # Find the minimum price for this attribute value
 #                 attribute_value_price = min(
-#                     float(row['Selling Price'])
+#                     float(row['Selling Price']) if row['Selling Price'] else float('0.0')
 #                     for row in rows
 #                     if row[attribute_name] == _value
 #                 )
-
 #                 # Calculate price increase
 
 #                 # print(attribute_value_price, min_selling_price, min_attribute_value_price)
@@ -202,7 +202,7 @@ fake = Faker()
 #             unique_brands.add(brand_name.title())
 
 
-# # print(unique_brands)
+# print(unique_brands)
 
 # for brand_name in unique_brands:
 #     # Check if the category_name already exists
@@ -215,7 +215,7 @@ fake = Faker()
 #         insert_query = sql.SQL("""
 #             INSERT INTO product_category (category_name, parent_category_id, category_description, category_img)
 #             VALUES ({}, {}, 'This is a category Description', 'category_img.png')
-#         """).format(sql.Literal(brand_name), sql.Literal(3))
+#         """).format(sql.Literal(brand_name), sql.Literal(84))
         
 #         cursor.execute(insert_query)
 #         # print("insert ", brand_name)
@@ -223,7 +223,7 @@ fake = Faker()
 #         insert_query = sql.SQL("""
 #             INSERT INTO product_category (category_name, parent_category_id, category_description, category_img)
 #             VALUES ({}, {}, 'This is a category Description', 'category_img.png')
-#         """).format(sql.Literal(brand_name + ' Laptop'), sql.Literal(3))
+#         """).format(sql.Literal(brand_name + ' Laptop'), sql.Literal(84))
 #         # print("insert ", brand_name + ' Laptop')
 #         cursor.execute(insert_query)
 
@@ -396,7 +396,7 @@ fake = Faker()
 #         insert_query = sql.SQL("""
 #             INSERT INTO product_category (category_name, parent_category_id, category_description, category_img)
 #             VALUES ({}, {}, 'This is a category Description', 'category_img.png')
-#         """).format(sql.Literal(brand_name), sql.Literal(47))
+#         """).format(sql.Literal(brand_name), sql.Literal(86))
         
 #         cursor.execute(insert_query)
 #         #print("insert ", brand_name)
@@ -404,7 +404,7 @@ fake = Faker()
 #         insert_query = sql.SQL("""
 #             INSERT INTO product_category (category_name, parent_category_id, category_description, category_img)
 #             VALUES ({}, {}, 'This is a category Description', 'category_img.png')
-#         """).format(sql.Literal(brand_name + ' Camera'), sql.Literal(47))
+#         """).format(sql.Literal(brand_name + ' Camera'), sql.Literal(86))
 #         # print("insert ", brand_name + ' Camera')
 #         cursor.execute(insert_query)
 
@@ -588,7 +588,7 @@ fake = Faker()
 #         insert_query = sql.SQL("""
 #             INSERT INTO product_category (category_name, parent_category_id, category_description, category_img)
 #             VALUES ({}, {}, 'This is a category Description', 'category_img.png')
-#         """).format(sql.Literal(brand_name), sql.Literal(127))
+#         """).format(sql.Literal(brand_name), sql.Literal(87))
         
 #         cursor.execute(insert_query)
 #         # print("insert ", brand_name)
@@ -596,166 +596,166 @@ fake = Faker()
 #         insert_query = sql.SQL("""
 #             INSERT INTO product_category (category_name, parent_category_id, category_description, category_img)
 #             VALUES ({}, {}, 'This is a category Description', 'category_img.png')
-#         """).format(sql.Literal(brand_name + ' TV'), sql.Literal(127))
+#         """).format(sql.Literal(brand_name + ' TV'), sql.Literal(87))
 #         #print("insert ", brand_name + ' TV')
 #         cursor.execute(insert_query)
 
 
 # Code for inserting each tv into the product table
 
-# model_rows_dict = {}
-# csv_file_path = 'TV.csv'
+model_rows_dict = {}
+csv_file_path = 'TV.csv'
 
-# def insert_product_and_attributes(model, category_id, rows):
-#     # Find the minimum selling price for the model
-#     min_selling_price = min(float(row['Selling Price']) for row in rows)
-#     min_original_price = min(float(row['Original Price']) if row['Original Price'] else min_selling_price + 1000 for row in rows)
-
-
-#     # Check if the product with this model already exists
-#     check_product_query = sql.SQL("""
-#         SELECT id FROM product
-#         WHERE product_name = {} LIMIT 1
-#     """).format(sql.Literal(model))
-
-#     cursor.execute(check_product_query)
-#     existing_product = cursor.fetchone()
-
-#     # print(existing_product, model, category_id)
-
-#     if not existing_product:
-#         # Insert product information
-#         insert_product_query = sql.SQL("""
-#             INSERT INTO product (
-#                 product_name, price, previous_price,
-#                 product_description, product_exerpt, product_img,
-#                 category_id, discount_status, discount, product_status,
-#                 visibility_status, date_added
-#             )
-#             VALUES (
-#                 {}, {}, {},
-#                 {}, {}, {},
-#                 {}, TRUE, {}, TRUE,
-#                 TRUE, CURRENT_DATE
-#             )
-#         """).format(
-#             sql.Literal(model),
-#             sql.Literal(min_selling_price),
-#             sql.Literal(min_original_price),  # Using min_selling_price as previous_price
-#             sql.Literal(fake.text()),
-#             sql.Literal(fake.text(max_nb_chars=50)),
-#             sql.Literal('none.png'),
-#             sql.Literal(category_id),
-#             sql.Literal(random.uniform(10, 20))
-#         )
-
-#         cursor.execute(insert_product_query)
-#         product_id = 100
-#         # Get the generated product_id
-#         cursor.execute("SELECT lastval()")
-#         product_id = cursor.fetchone()[0]
-
-#         # Get unique attribute values for each attribute_name
-#         #print("INSERT ", model, category_id)
-#         unique_attributes = {key: set(row[key] for row in rows) for key in ['Resolution', 'Size ', 'Operating System']}
-#         # print(unique_attributes)
+def insert_product_and_attributes(model, category_id, rows):
+    # Find the minimum selling price for the model
+    min_selling_price = min(float(row['Selling Price']) for row in rows)
+    min_original_price = min(float(row['Original Price']) if row['Original Price'] else min_selling_price + 1000 for row in rows)
 
 
-#         # Insert product_attribute information
-#         # print('This is the min Selling price', min_selling_price)
-#         for attribute_name, values in unique_attributes.items():
-#             base_spec_claimed = False
-#             min_attribute_value_price = float('inf')
+    # Check if the product with this model already exists
+    check_product_query = sql.SQL("""
+        SELECT id FROM product
+        WHERE product_name = {} LIMIT 1
+    """).format(sql.Literal(model))
 
-#             for _value in values:
-#                 # Find the minimum price for this attribute value
-#                 attribute_value_price = min(
-#                     float(row['Selling Price'])
-#                     for row in rows
-#                     if row[attribute_name] == _value
-#                 )
+    cursor.execute(check_product_query)
+    existing_product = cursor.fetchone()
 
-#                 # Calculate price increase
+    # print(existing_product, model, category_id)
 
-#                 # print(attribute_value_price, min_selling_price, min_attribute_value_price)
-#                 price_increase = 0
-#                 price_increase = attribute_value_price - float(min_selling_price)
+    if not existing_product:
+        # Insert product information
+        insert_product_query = sql.SQL("""
+            INSERT INTO product (
+                product_name, price, previous_price,
+                product_description, product_exerpt, product_img,
+                category_id, discount_status, discount, product_status,
+                visibility_status, date_added
+            )
+            VALUES (
+                {}, {}, {},
+                {}, {}, {},
+                {}, TRUE, {}, TRUE,
+                TRUE, CURRENT_DATE
+            )
+        """).format(
+            sql.Literal(model),
+            sql.Literal(min_selling_price),
+            sql.Literal(min_original_price),  # Using min_selling_price as previous_price
+            sql.Literal(fake.text()),
+            sql.Literal(fake.text(max_nb_chars=50)),
+            sql.Literal('none.png'),
+            sql.Literal(category_id),
+            sql.Literal(random.uniform(10, 20))
+        )
+
+        cursor.execute(insert_product_query)
+        product_id = 100
+        # Get the generated product_id
+        cursor.execute("SELECT lastval()")
+        product_id = cursor.fetchone()[0]
+
+        # Get unique attribute values for each attribute_name
+        #print("INSERT ", model, category_id)
+        unique_attributes = {key: set(row[key] for row in rows) for key in ['Resolution', 'Size ', 'Operating System']}
+        # print(unique_attributes)
+
+
+        # Insert product_attribute information
+        # print('This is the min Selling price', min_selling_price)
+        for attribute_name, values in unique_attributes.items():
+            base_spec_claimed = False
+            min_attribute_value_price = float('inf')
+
+            for _value in values:
+                # Find the minimum price for this attribute value
+                attribute_value_price = min(
+                    float(row['Selling Price'])
+                    for row in rows
+                    if row[attribute_name] == _value
+                )
+
+                # Calculate price increase
+
+                # print(attribute_value_price, min_selling_price, min_attribute_value_price)
+                price_increase = 0
+                price_increase = attribute_value_price - float(min_selling_price)
                 
 
-#                 # Set base_spec condition
-#                 base_spec = False
-#                 if price_increase == 0 and not base_spec_claimed:
-#                     base_spec = True
-#                     base_spec_claimed = True
+                # Set base_spec condition
+                base_spec = False
+                if price_increase == 0 and not base_spec_claimed:
+                    base_spec = True
+                    base_spec_claimed = True
 
-#                 # Set stock based on the formula
-#                 stock = int(300 / len(values))
+                # Set stock based on the formula
+                stock = int(300 / len(values))
 
-#                 insert_attribute_query = sql.SQL("""
-#                     INSERT INTO product_attribute (
-#                         product_id, attribute_name, _value,
-#                         price_increase, stock, sold, base_spec
-#                     )
-#                     VALUES (
-#                         {}, {}, {}, {}, {}, 50, {}
-#                     )
-#                 """).format(
-#                     sql.Literal(product_id),
-#                     sql.Literal(attribute_name),
-#                     sql.Literal(_value),
-#                     sql.Literal(price_increase),
-#                     sql.Literal(stock),
-#                     sql.Literal(base_spec)
-#                 )
+                insert_attribute_query = sql.SQL("""
+                    INSERT INTO product_attribute (
+                        product_id, attribute_name, _value,
+                        price_increase, stock, sold, base_spec
+                    )
+                    VALUES (
+                        {}, {}, {}, {}, {}, 50, {}
+                    )
+                """).format(
+                    sql.Literal(product_id),
+                    sql.Literal(attribute_name),
+                    sql.Literal(_value),
+                    sql.Literal(price_increase),
+                    sql.Literal(stock),
+                    sql.Literal(base_spec)
+                )
 
-#                 if len(unique_attributes[attribute_name]) > 1:
-#                     print("Insert ", 23, attribute_name, _value, price_increase, stock, base_spec)
+                if len(unique_attributes[attribute_name]) > 1:
+                    print("Insert ", 23, attribute_name, _value, price_increase, stock, base_spec)
 
-#                 #print("Insert ", 23, attribute_name, _value, price_increase, stock, base_spec)
+                #print("Insert ", 23, attribute_name, _value, price_increase, stock, base_spec)
 
-#                 cursor.execute(insert_attribute_query)
-
-
+                cursor.execute(insert_attribute_query)
 
 
-# with open(csv_file_path, 'r') as csv_file:
-#     reader = csv.DictReader(csv_file)
-#     for row in reader:
-#         model_name = row.get('Brand').strip() + ' ' + row.get('Resolution').strip()
 
-#         if model_name not in model_rows_dict:
-#             model_rows_dict[model_name] = []
 
-#         model_rows_dict[model_name].append(row)
+with open(csv_file_path, 'r') as csv_file:
+    reader = csv.DictReader(csv_file)
+    for row in reader:
+        model_name = row.get('Brand').strip() + ' ' + row.get('Resolution').strip()
 
-# # print(model_rows_dict)
+        if model_name not in model_rows_dict:
+            model_rows_dict[model_name] = []
 
-# # # Iterate through the dictionary and insert products and attributes
-# for model, rows in model_rows_dict.items():
-#     # Find category_id for the model's brand
-#     brand_category_query = sql.SQL("""
-#         SELECT category_id FROM product_category WHERE category_name = {}
-#     """).format(sql.Literal(rows[0].get('Brand').title()))
-#     # print(rows[0].get('Model').split(' ')[0].title())
+        model_rows_dict[model_name].append(row)
+
+# print(model_rows_dict)
+
+# # Iterate through the dictionary and insert products and attributes
+for model, rows in model_rows_dict.items():
+    # Find category_id for the model's brand
+    brand_category_query = sql.SQL("""
+        SELECT category_id FROM product_category WHERE category_name = {}
+    """).format(sql.Literal(rows[0].get('Brand').title()))
+    # print(rows[0].get('Model').split(' ')[0].title())
     
-#     cursor.execute(brand_category_query)
-#     brand_category_id = cursor.fetchone()
-#     # print(brand_category_id)
-#     brand_category_query_alt = sql.SQL(
-#         "SELECT category_id FROM product_category WHERE category_name = {}"
-#     ).format(sql.Literal(rows[0].get('Brand').title().strip() + ' TV')
-#     )
+    cursor.execute(brand_category_query)
+    brand_category_id = cursor.fetchone()
+    # print(brand_category_id)
+    brand_category_query_alt = sql.SQL(
+        "SELECT category_id FROM product_category WHERE category_name = {}"
+    ).format(sql.Literal(rows[0].get('Brand').title().strip() + ' TV')
+    )
     
-#     cursor.execute(brand_category_query_alt)
-#     brand_category_id_alt = cursor.fetchone()
-#     if brand_category_id_alt is not None:
-#         brand_category_id = brand_category_id_alt
+    cursor.execute(brand_category_query_alt)
+    brand_category_id_alt = cursor.fetchone()
+    if brand_category_id_alt is not None:
+        brand_category_id = brand_category_id_alt
     
-#     print(brand_category_id, model)
+    print(brand_category_id, model)
     
-#     if brand_category_id:
-#         # Insert product and attributes
-#         insert_product_and_attributes(model, brand_category_id[0], rows)
+    if brand_category_id:
+        # Insert product and attributes
+        insert_product_and_attributes(model, brand_category_id[0], rows)
 
 
 

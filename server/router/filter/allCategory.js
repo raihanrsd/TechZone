@@ -11,7 +11,7 @@ router.get('/', async(req, res, next) => {
             `  
                 select category_id, category_name 
                 from product_category
-                where parent_category_id = 1;
+                where parent_category_id = 81;
             `
         const categories = await pool.query(sql);
 

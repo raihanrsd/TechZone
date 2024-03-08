@@ -1,13 +1,15 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import ".././css/home.css";
+import ".././css/AboutUS.css"
 
 import laptop from "../../image/laptop.png";
 import phone from "../../image/Iphone.jpg";
 import headphone from "../../image/headset5.jpg";
+import webLogo from "../../image/WebLOGO.png";
 
 
 import ProductSlider from "../Products/productSlider";
@@ -40,7 +42,11 @@ export default function Home({isAuthenticated, setAuth}) {
 const handleClick = (category) => {
   console.log(category);
 }
+  const navigate = useNavigate();
 
+    const handleDiscoverClick = () => {
+        navigate('/filter');
+    }; 
   return (
     <Fragment>
 
@@ -107,6 +113,58 @@ const handleClick = (category) => {
         </div>
         </section>
 
+        {/* AboutUS */}
+        <div
+                className="container darkShadow"
+                style={{
+                    height: "600px",
+                    marginTop: "30px",
+                    marginBottom: "30px",
+                    backgroundColor: "lavender",
+                    borderRadius: 20,
+                }}
+            >
+                <div className="heading">
+                    <h1>
+                        <u>About Us</u>
+                    </h1>
+                </div>
+
+                <div className="content">
+                    <div className="title">
+                        <h2> Welcome To TechZone </h2>
+                        <p>
+                            This is where innovation meets convenience! Prioritizing your needs, we
+                            offer premium gadgets and electronics. Our commitment includes
+                            providing a user-friendly environment and a reliable payment
+                            gateway system. With our top-quality products ... 
+                            <Link
+                                to="/about"
+                                style={{ color: 'lightblue', margin: '7px',textDecoration: 'none', transition: 'color 0.3s ease' }}
+                                onMouseEnter={(e) => e.target.style.color = 'blueviolet'}
+                                onMouseLeave={(e) => e.target.style.color = '#007FFF'}
+                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                            >
+                    Read More
+                </Link>
+                        </p>                        
+                    </div>
+
+                    <div
+                        className="imageSection "
+                        style={{ height: "362px", width: "362px", borderRadius: 23 }}
+                    >
+                        <img
+                            src={webLogo}
+                            alt="Web Logo"
+                            className="webLogo darkShadow"
+                            style={{ height: "350px", width: "350px", borderRadius: 20 }}
+                        />
+                    </div>
+                </div>
+            </div>
+
+        {/* FAQ */}
         <h5 class="display-6 font-weight-bold pt-3 text-center container" style={{width: 'auto', height: '80px',backgroundColor: 'white', marginTop:'10px', borderRadius: 20}} > FAQ </h5>
         <div class="accordion accordion-flush container" id="accordionFlushExample">
           <div class="accordion-item">

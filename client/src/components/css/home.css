@@ -1,6 +1,7 @@
 * {
 	font-family: 'Montserrat', sans-serif;
 }
+
 .bg-light {
 	background-color: black !important;
 }
@@ -10,6 +11,9 @@
 }  
 .custom-shadow {
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Adjust values for the shadow effect */
+}
+.carousel{
+	margin-top: -17px;
 }
 .carousel-item {
 	height: 100vh;

@@ -32,7 +32,7 @@ export default function AboutUS() {
                 className="container darkShadow"
                 style={{
                     height: "600px",
-                    marginTop: "130px",
+                    marginTop: "30px",
                     backgroundColor: "lavender",
                     borderRadius: 20,
                 }}
