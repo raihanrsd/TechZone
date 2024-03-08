@@ -107,9 +107,7 @@
 
 
 
-.edit-form {
-  /* Add additional styling for form elements */
-}
+
 
 .close-button {
   position: absolute;
@@ -174,4 +172,85 @@
   font-weight: 600;
   margin-bottom: 50px;
   color: rgba(0, 0, 0, 0.5)
+}
+
+
+.notification-container {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid black;
+  overflow-y : scroll;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.notification-header {
+
+  color: #fff;
+  padding: 10px;
+  font-weight: bold;
+  margin-top: 100px;
+  font-size: 20px;
+}
+
+.notification-body {
+  padding: 10px;
+}
+
+.nav-bar-icons{
+  color: white;
+  margin: 10px;
+  
+}
+
+.cart-counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red; /* Choose your desired background color */
+  color: white;
+  border-radius: 50%;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.nav-icons-div{
+  position: relative;
+}
+
+.notification-item{
+  color: white;
+  padding: 15px 5px;
+  font-weight: lighter;
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+  margin: 10px;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
+}
+
+.notification-time{
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  font-size: 10px;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0px 15px 0px 15px;
+}
+
+.notification-item:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.notification-text{
+  padding: 10px;
+  margin-top: 10px;
+  padding-bottom: 0px;
 }

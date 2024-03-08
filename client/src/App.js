@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { addToCart, getCart } from './components/Cart/cartUtils';
+import { addToCart, getCart, getTotalItems } from './components/Cart/cartUtils';
 
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
@@ -29,16 +29,25 @@ import OrderPage from './components/Order/order';
 
 import ErrorPage from './components/ReUse/Error';
 import TrackerPage from './components/Order/Tracker';
+import LoadingIndicator from './components/ReUse/LoadingIndicator';
+import AdminDeliveryManUi from './components/Admin/AdminDeliveryManUi';
+
 
 import FilterPage from './components/filter/filterPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [cartCounter, setCartCounter] = useState(getTotalItems());
+  const [reRender, setReRender] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isDeliveryMan, setIsDeliveryMan] = useState(false);
   const cart = getCart();
 
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
   }
+
+  // setReRender(!reRender);
 
   async function isAuth(){
     try {
@@ -48,8 +57,14 @@ function App() {
       });
       
       const parseRes = await response.json();
-      // console.log(parseRes);
-      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+      // console.log('this is the verify parseres', parseRes);
+      parseRes.verified === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+      if(parseRes.verified === true){
+        setIsAdmin(parseRes.status === "admin");
+        setIsDeliveryMan(parseRes.status === "delivery_man");
+      }
+      // console.log(parseRes.status);
+      
     } catch (err) {
       console.error(err.message);
       // console.log("Error in isAuth")
@@ -57,12 +72,18 @@ function App() {
   }
 
   useEffect(() => {
+    console.log("this is an admin", isAdmin)
+  }, [isAdmin])
+
+  
+
+  useEffect(() => {
     console.log('it is happenning');
     isAuth();
   }, []);
   // Wait until authentication check is complete before rendering
   if (isAuthenticated === undefined) {
-    return null; // or loading indicator
+    return <LoadingIndicator />; // or loading indicator
   }
 
   return (
@@ -72,25 +93,27 @@ function App() {
       <ToastContainer />
       
       <Router>
-      <Navbar isAuthenticated={isAuthenticated} />
+      <Navbar isAuthenticated={isAuthenticated} isAdmin={isAdmin} isDeliveryMan={isDeliveryMan} setAuth={setAuth} cartCounter={cartCounter} reRender={reRender} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} />
         <Routes>
           <Route exact path="/login" element={!isAuthenticated?  <Login setAuth={setAuth} /> : <Navigate to ="/" />} />
           <Route exact path="/register" element={!isAuthenticated?  <Register setAuth={setAuth} /> : <Navigate to ="/" />} />
           <Route exact path="/dashboard" element={isAuthenticated?  <Dashboard setAuth={setAuth} /> : <Navigate to ="/login" />} />
-          <Route exact path="/checkout" element={isAuthenticated?  <Checkout setAuth={setAuth} /> : <Navigate to ="/login" />} />
+          <Route exact path="/checkout" element={isAuthenticated?  <Checkout setAuth={setAuth} setReRender={setReRender} reRender={reRender} /> : <Navigate to ="/login" />} />
           {/* <Route exact path="/" element={<Navigate to="/login"/>} /> */}
           <Route exact path="/admin" element={<AddPage />}/>
           <Route exact path="/error" element={<ErrorPage />}/>
           <Route exact path="/filter" element={<FilterPage isAuthenticated={isAuthenticated} Category={''}/>}/>
-          <Route exact path="/techProducts" element={<TechProduct isAuthenticated={isAuthenticated} />}/>       
-          <Route exact path="/product/:id" element={<Product isAuthenticated={isAuthenticated} />}/>
           <Route exact path="/order/:order_id" element={isAuthenticated?  <OrderPage isAuthenticated={isAuthenticated} /> : <Navigate to ="/login" />} />
+          <Route exact path="/techProducts" element={<TechProduct isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} />}/>       
+          <Route exact path="/product/:id" element={<Product isAuthenticated={isAuthenticated} isAdmin={isAdmin} />}/>
+          
           <Route exact path="/tracker/:tracker_id" element={isAuthenticated?  <TrackerPage isAuthenticated={isAuthenticated} /> : <Navigate to ="/login" />} />
-          <Route exact path="/" element={<Home isAuthenticated={isAuthenticated} />}/>
+          <Route exact path="/" element={isAuthenticated && isAdmin || isDeliveryMan?<AdminDeliveryManUi isAdmin={isAdmin} isDeliveryMan={isDeliveryMan} setAuth={setAuth} setIsAdmin={setIsAdmin} setIsDeliveryMan={setIsDeliveryMan} />:<Home isAuthenticated={isAuthenticated} setAuth={setAuth} />}/>
           <Route exact path="/search" element={<Search isAuthenticated={isAuthenticated} />}/>
-          <Route exact path="/wishlist" element={<Wishlist isAuthenticated={isAuthenticated} />}/>
-          <Route exact path="/cart" element={<Cart isAuthenticated={isAuthenticated} />}/>
+          <Route exact path="/wishlist" element={<Wishlist isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} />}/>
+          <Route exact path="/cart" element={<Cart isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} setReRender={setReRender} />}/>
           <Route exact path="/user" element={isAuthenticated?  <UserPage isAuthenticated={isAuthenticated}  /> : <Navigate to ="/login" />} />
+          <Route path="/*" element={<Navigate to="/error" />} />
         </Routes>
       </Router>
     </Fragment>

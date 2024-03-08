@@ -583,3 +583,18 @@ f26f0f2f-2ee1-48a6-8187-8fad86bf74eb
 
 INSERT INTO general_user(username, email, password, contact_no, profile_img, full_name, staff_status)
 VALUES('raihanrsd03', 'raihanrsd03@gmail.com', '123456', '12345678', 'nice.img', 'raihan rashid', 'customer');
+
+
+
+
+INSERT INTO general_user(username, email, password, contact_no, profile_img, full_name, staff_status)
+VALUES('customerService1', 'customerService1@gmail.com', '$2b$10$K2uLTjOY1TG/IkFwn7dPXOrWSySMJxp/wi1j3Pj7UBNarsxqKOfIO', '1253234', 'user.img', 'raihan rashid', 'admin');
+
+
+INSERT INTO general_user(username, email, password, contact_no, profile_img, full_name, staff_status)
+VALUES('customerService2', 'customerService2@gmail.com', '$2b$10$K2uLTjOY1TG/IkFwn7dPXOrWSySMJxp/wi1j3Pj7UBNarsxqKOfIO', '12532343', 'user.img', 'raihan rashid', 'admin');
+
+
+
+INSERT INTO general_user(username, email, password, contact_no, profile_img, full_name, staff_status)
+VALUES('customerService3', 'customerService3@gmail.com', '$2b$10$K2uLTjOY1TG/IkFwn7dPXOrWSySMJxp/wi1j3Pj7UBNarsxqKOfIO', '125323433', 'user.img', 'raihan rashid', 'admin');

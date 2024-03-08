@@ -15,9 +15,11 @@ router.post('/register', validInfo, async (req, res) => {
     try{
         // 1. destructure the req.body (name, email, password, contact_no, profile_img, full_name, gender, staff_status
 
-        const { username, email, password, contact_no, profile_img, full_name, gender, staff_status} = req.body;
-
+        const { username, email, password, confirmed_password, contact_no, profile_img, full_name, gender, staff_status} = req.body;
+        console.log(username, email, password, confirmed_password, contact_no, profile_img, full_name, gender, staff_status);
         // 2.check if user exists (if user exists then throw error)
+
+
         
         const user = await pool.query('SELECT * FROM general_user WHERE email = $1 OR username = $2 OR contact_no = $3', [email, username, contact_no]);
         if(user.rows.length !== 0){
@@ -94,8 +96,16 @@ router.post('/login', validInfo, async (req, res) => {
 router.get('/is-verify', authorization, async (req, res) => {
     try{
         // if it passes authorization than it is valid
-        res.json(true);
+        const user = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [req.user]);
+
+        res.json({
+            verified: true,
+            status: user.rows[0].staff_status
+        });
         // console.log(req.user);
+        
+
+
     }
     catch(err){
         console.error(err.message);

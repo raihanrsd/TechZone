@@ -14,7 +14,7 @@ import ProductSlider from "../Products/productSlider";
 import PageFooter from "./PageFooter";
 import FilterPage from "../filter/filterPage";
 
-export default function Home({isAuthenticated}) {
+export default function Home({isAuthenticated, setAuth}) {
   const [products, setProducts] = useState([]);
   const number = 5;
   useEffect(() =>{

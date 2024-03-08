@@ -49,6 +49,11 @@ export const addToCart = (productId, quantity, specs) => {
     
 };
 
+export const getTotalItems = () => {
+  const cart = getCart();
+  return Object.values(cart).reduce((acc, product) => acc + product.length, 0);
+}
+
 export const clearCart = () => {
   const cart = {};
   updateCart(cart);

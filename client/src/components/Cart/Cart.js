@@ -7,14 +7,22 @@ import {
   removeFromCart,
   updateCart,
   removeSpecFromCart,
+  getTotalItems,
 } from "./cartUtils";
 
-const Cart = ({isAuthenticated}) => {
+
+
+const Cart = ({isAuthenticated, setCartCounter, setReRender}) => {
   const navigate = useNavigate();
   const [cart, setCart] = useState(getCart());
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState([]);
   const [products, setProducts] = useState();
+  const [selectedSpecs, setSelectedSpecs] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [editProductId, setEditProductId] = useState(null);
+  const [editIndex, setEditIndex] = useState(null);
+  const [specs, setSpecs] = useState([]);
 
   useEffect(() => {
     const getAllProducts = async () => {
@@ -184,6 +192,21 @@ const Cart = ({isAuthenticated}) => {
     
   };
 
+  const individualProductPrice = (product_id, specs) => {
+    const product = products[product_id];
+    let price = product.price;
+
+    if (product) {
+      specs.forEach((spec) => {
+        price += parseFloat(spec.price_increase);
+      });
+    } else {
+      console.error(`Product with ID ${product_id} not found.`);
+    }
+
+    return price;
+  }
+
   const removeProduct = (product_id, index) => {
     const qty = cart[product_id][index].quantity;
     const product = products[product_id];
@@ -203,12 +226,85 @@ const Cart = ({isAuthenticated}) => {
       removeSpecFromCart(product_id, index);
       setTotalPrice(total);
       setCart(cart);
+      setCartCounter(getTotalItems());
     } else {
       console.error(`Product with ID ${product_id} not found.`);
     }
   };
 
-  const updateSpec = (product_id, index) => {};
+
+  const updateSpec =  (product_id, index) => {
+    setEditMode(true);
+    let Info = cart[product_id][index]; // Assign a new empty array
+    let spec_map = [];
+    Info.specs.forEach((spec) => {
+      spec_map.push(spec);
+    });
+    setSelectedSpecs(spec_map);
+    spec_map = {};
+    const allSpecs = products[product_id].specs;
+    allSpecs.forEach((spec) => {
+      if (!spec_map[spec.attribute_name]) {
+        spec_map[spec.attribute_name] = [];
+      }
+      spec_map[spec.attribute_name].push(spec);
+    })
+    setSpecs(spec_map);
+    setEditProductId(product_id);
+    setEditIndex(index);
+
+    console.log(specs, selectedSpecs, product_id, index);
+  };
+
+  const handleClose = () => {
+    setEditMode(!editMode);
+  }
+
+  const handleSpecAdd = (specName, spec_id) => {
+    let previous_price = 0;
+    const updatedSpecs = selectedSpecs.map((spec) => {
+        //console.log(specName, spec);
+        
+
+        if (spec.attribute_name !== specName) {
+            // Check if the current spec does not match the one to be updated
+            return spec; // Keep the other specs unchanged
+        }
+       
+        previous_price = parseFloat(spec.price_increase);
+        
+        
+        // Return null or any value since this spec should be removed
+        return spec;
+    });
+    
+    // Filter out null values
+
+    const filteredUpdatedSpecs = updatedSpecs.filter((spec) => spec.attribute_name !== specName);
+    
+    // Add the new spec with the given spec_id and specName
+    const newSpec = specs[specName].find((spec) => spec.id === spec_id && spec.attribute_name === specName);
+
+    const newSpecArray = [];
+    
+    setTotalPrice(totalPrice + (parseFloat(newSpec.price_increase) - previous_price) * cart[editProductId][editIndex].quantity);
+    setSelectedSpecs([...filteredUpdatedSpecs, newSpec]);
+    setCart((prevCart) => {
+      const newCart = {...prevCart};
+      newCart[editProductId][editIndex].specs = [...filteredUpdatedSpecs, newSpec];
+      return newCart;
+    });
+
+    console.log('change-done');
+  }
+
+  useEffect(() => {
+    console.log('selectedSpecs updated:', selectedSpecs);
+  }, [selectedSpecs]);
+
+  useEffect(() => {
+    console.log('Current Cart', cart);
+  }, [cart])
 
   return (
     <Fragment>
@@ -306,7 +402,7 @@ const Cart = ({isAuthenticated}) => {
                             onChange={(e) => onChange(e, product_id, index)}
                           />
                         </td>
-                        <td>{products[product_id].price}</td>
+                        <td>{info && individualProductPrice(product_id, info.specs)}</td>
                         <td>
                           <button
                             className="btn btn-danger"
@@ -321,6 +417,7 @@ const Cart = ({isAuthenticated}) => {
                           >
                             Update Spec
                           </button>
+
                         </td>
                       </tr>
                     );
@@ -348,7 +445,57 @@ const Cart = ({isAuthenticated}) => {
             Proceed to Checkout
           </button>
         </div>
+        {
+        editMode && (
+          <div className='edit-form-overlay'>
+            <div className='edit-form-container'>
+            <div>
+              <h2>Specifications</h2>
+              <button className="btn btn-danger close-button" onClick={handleClose}>
+                X
+              </button>
+            </div>
+            
+
+              {
+                editProductId && cart[editProductId][editIndex] && selectedSpecs && specs &&
+
+                  (
+                    <Fragment>
+                      <h2>nice</h2>
+                      <div>
+                          {
+                            Object.entries(specs).map(([specName, specArray]) => (
+                              <Fragment>
+                              <h4>{specName}</h4>
+                            <div key={specName} className='individual-spec'>
+                              
+                              {specArray.map((s, index) => (
+                                  <div key={`${specName}-${index}`}
+                                  className={`spec-box ${selectedSpecs && selectedSpecs.some((selectedSpec) => selectedSpec.id === s.id) ? 'active' : ''}`} onClick={() => handleSpecAdd(s.attribute_name, s.id)}>
+                                <p key={index} className="spec-value">
+                                  {s._value}
+                                </p>
+                                <p>+{s.price_increase}</p>
+                                </div>
+                              ))}
+                            </div>
+                            </Fragment>
+                          ))
+                          }
+                      </div>
+                    </Fragment>
+                  )
+
+                  
+                
+              }
+            </div>
+          </div>
+        )
+        }
       </div>
+      
     </Fragment>
   );
 };

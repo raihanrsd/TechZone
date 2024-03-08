@@ -3,14 +3,29 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import ErrorPage from "../ReUse/Error";
+import LoadingIndicator from "../ReUse/LoadingIndicator";
+import CancelOrderBox from "./CancelOrderBox";
+import AssignedOrderBox from "./AssignedOrderBox";
+import ReasonBox from "./ReasonBox";
+import moment from "moment";
 import "./order.css";
 
 const OrderPage = ({ isAuthenticated }) => {
   const [order, setOrder] = useState(null);
   const [product_info, setProductInfo] = useState(null);
+  const [assginedUser, setAssignedUser] = useState(null);
   const [tracker, setTracker] = useState(null);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // New state for loading indicator
   const { order_id } = useParams();
+  const navigate = useNavigate();
+  const [cancelOrder, setCancelOrder] = useState(false);
+  const [showDeliveryMan, setShowDeliveryMan] = useState(false);
+  const [showReasonBox, setShowReasonBox] = useState(false);
+  const [reason, setReason] = useState({
+    reason: "",
+    reasonText: "",
+  });
 
   function formatDateString(originalDateString) {
     const originalDate = new Date(originalDateString);
@@ -38,24 +53,52 @@ const OrderPage = ({ isAuthenticated }) => {
         console.log(parseRes);
 
         if(!parseRes.isAuthorized){
-            return(
-                <ErrorPage message={parseRes.message} />
-            );
+          toast.error(parseRes.message)
+          navigate("/");
+          return(
+
+          <ErrorPage message={"Sorry You are not authorized to view this page"} />
+          )
         }
         setOrder(parseRes.order);
         setProductInfo(parseRes.product_info);
         setTracker(parseRes.tracker);
         setUser(parseRes.user);
+        setAssignedUser(parseRes.assigned_user);
+        if(parseRes.order.order_status === 'Cancelled'){
+          const orderReason = JSON.parse(parseRes.order.reason_for_cancellation);
+          setReason({
+            reason: orderReason.reason,
+            reasonText : orderReason.reasonText
+          })
+        }
+        
       } catch (err) {
         console.error(err.message);
+      } finally {
+        setLoading(false); // Set loading to false when data fetching is complete
       }
     };
     getOrder();
-  }, []);
+  }, [order_id, navigate]);
+
+  useEffect(() => {
+    console.log('this is product info', product_info)
+  }, [product_info]);
+
+  if (loading) {
+    return <LoadingIndicator />; // Render loading indicator while data is being fetched
+  }
+
+  
 
   if (!order) {
     return null; // or loading indicator
   }
+
+ 
+
+
 
   return (
     <Fragment>
@@ -63,14 +106,32 @@ const OrderPage = ({ isAuthenticated }) => {
         <h1 className="order-heading">Order ID: #{order.order_id}</h1>
         
         <div className="btn-div">
-            <Link to={`/tracker/${tracker.tracker_id}`}> <button className="btn btn-primary order-button">Tracker</button></Link>
-            <button className="btn btn-danger order-button">Cancel Order</button>
+
+            <button className='btn btn-outline-warning order-button' onClick={() => setShowDeliveryMan(true)}>Assigned Delivery Man</button>
+            {tracker &&
+              <Link to={`/tracker/${tracker.tracker_id}`}> <button className="btn btn-primary order-button tracker">Tracker</button></Link>
+            }
+            { order.order_status !== 'Cancelled' ?
+              <button className="btn btn-outline-danger order-button cancel" onClick={() => setCancelOrder(true)}>Cancel Order</button> :
+              <button className="btn btn-outline-danger order-button cancel" onClick={() => setShowReasonBox(true)}>Cancellation Reason</button>
+            }
+
+            
         </div>
       </div>
 
       <div className="status-div">
         <p className="order-date">Order Date: {formatDateString(order.date_added)}</p>
-        <p className="estimated-delivery">Estimated Delivery Date: {formatDateString(tracker.estimated_delivery_date)}</p>
+        <p className="estimated-delivery">{
+          order.order_status !== 'Delivered' ?
+        "Estimated" : ''
+        } Delivery Date: {
+          order.order_status !== 'Delivered' ?
+          tracker ?
+        formatDateString(tracker.estimated_delivery_date): 'Not Applicable' :
+        moment(order.delivery_time).format('MMMM DD, YYYY hh:mm a')
+        
+        }</p>
         <p className={order.order_status} style={{marginLeft: 'auto'}}>Order Status: {order.order_status}</p>
       </div>
 
@@ -86,11 +147,14 @@ const OrderPage = ({ isAuthenticated }) => {
                   
                   <div className="order-product-info-div">
                     <div className="order-product-image-div">
-                      <img
-                        src="/images/Product/test.png"
-                        className="order-product-image"
-                        width="200px"
-                      />
+                    {
+                        product.product && product.product.images ?
+                        <img src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}` + product.product.images[0].image_url} className="order-product-image"
+                        width="200px" height="300px" alt="..." />:
+                        <img src="/images/Product/test.png" className="order-product-image"
+                        width="200px"  alt="..." />
+                    }
+                      
                     </div>
                     <div className="order-product-details-div">
                       <div className="order-product-inner-1">
@@ -176,6 +240,17 @@ const OrderPage = ({ isAuthenticated }) => {
           </div>
         </div>
       </div>
+      {
+        cancelOrder && <CancelOrderBox order_id={order.order_id} setCancelOrder={setCancelOrder} />
+      }
+
+      {
+        showDeliveryMan && <AssignedOrderBox user_data={assginedUser} setShowDeliveryMan={setShowDeliveryMan} />
+      }
+
+      {
+        showReasonBox && <ReasonBox setShowReasonBox={setShowReasonBox} reason={reason.reason} reasonText={reason.reasonText} />
+      }
     </Fragment>
   );
 };

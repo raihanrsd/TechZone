@@ -59,3 +59,43 @@ ADD COLUMN country VARCHAR(200) DEFAULT 'Bangladesh';
 ALTER TABLE orders
 DROP COLUMN address_id;
 
+ALTER TABLE notification
+ADD COLUMN time_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE notification
+DROP COLUMN date_added;
+
+
+ALTER TABLE product_review
+ADD COLUMN time_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE product_review
+DROP COLUMN date_added;
+
+
+-- Drop the existing constraint
+ALTER TABLE product_review
+DROP CONSTRAINT product_review_rating_check;
+
+-- Alter the column to use NUMERIC data type
+ALTER TABLE product_review
+ALTER COLUMN rating TYPE NUMERIC;
+
+-- Add the new constraint to allow decimal values between 0 and 5
+ALTER TABLE product_review
+ADD CONSTRAINT product_review_rating_check CHECK (rating >= 0 AND rating <= 5);
+
+
+
+
+ALTER TABLE product
+ADD COLUMN admin_id uuid NOT NULL DEFAULT 'f26f0f2f-2ee1-48a6-8187-8fad86bf74eb',
+ADD FOREIGN KEY (admin_id) REFERENCES admin(user_id) ON DELETE CASCADE;
+
+
+
+ALTER TABLE orders 
+ADD COLUMN delivery_time TIMESTAMP DEFAULT NULL; 
+
+ALTER TABLE orders 
+ADD COLUMN reason_for_cancellation TEXT DEFAULT '';

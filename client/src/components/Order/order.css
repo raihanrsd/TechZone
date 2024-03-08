@@ -8,8 +8,45 @@
 
 .order-button{
     width: 200px;
+    min-width: 200px;
     margin: 10px;
+    background-color: transparent;
+    color: #48277d;
+    border: 1px solid #48277d;
 }
+
+.order-button:hover{
+    background-color: #48277d;
+    color: white;
+    border: 1px solid #48277d;
+}
+
+
+.order-button.cancel{
+    background-color: transparent;
+    color: #f44336;
+    border: 1px solid #f44336;
+
+}
+
+.order-button.cancel:hover{
+    background-color: #f44336;
+    color: white;
+    border: 1px solid #f44336;
+}
+
+.order-button.tracker{
+    background-color: transparent;
+    color: #3194f6;
+    border: 1px solid #3194f6;
+}
+
+.order-button.tracker:hover{
+    background-color: #3194f6;
+    color: white;
+    border: 1px solid #3194f6;
+}
+
 .order-heading-div{
     margin-top: 150px;
     display: flex;
@@ -21,6 +58,7 @@
 
 .order-heading{
     color: #3194f6;
+    text-decoration: none;
 }
 
 .estimated-delivery{
@@ -112,7 +150,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 30%;
+    width: auto;
 }
 
 .order-product-image-div{
@@ -124,8 +162,8 @@
 }
 
 .order-product-image{
-    max-width: 100%;
-    max-height: 100%;
+    width: 200px;
+    height: 300px;
     object-fit: contain;
 }
 
@@ -133,7 +171,6 @@
     width: 68%;
     margin: 1%;
     display: flex;
-    
     justify-content: space-between;
     align-items: flex-start;
 }
@@ -201,4 +238,202 @@
     align-items: center;
 }
 
+.progress-bar-div {
+    width: 100%;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
+.progress-icon-div{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: -25px;
+}
+
+.progress-icon-inner-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+
+.progress-bar-icon{
+    width: 30px;
+    height: 30px;
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    background-color: black;
+}
+
+.progress-bar {
+    width: 80%;
+    height: 20px;
+    background-color: #f7f7f7;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #3194f6;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-icon{
+    width: 50px;
+    
+}
+
+.status-icon-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    
+}
+
+.status-icon-inner-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+}
+
+
+.cancel-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 1000; /* Ensure it's above other elements */
+  }
+  
+  .cancel-form-container {
+    background: rgba(0,0,0,0.5);
+    position: relative;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    min-width: 500px;
+    height: 400px;
+    overflow: scroll;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+  }
+
+  .cancel-box-heading{
+    font-size: 24px;
+    color: white;
+    margin-bottom: 50px;
+  }
+
+  .cancel-form{
+    width: 500px;
+  margin: 20px ;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 0px;
+  }
+
+
+  .cancel-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    appearance: none; /* Remove default arrow */
+    cursor: pointer;
+  }
+  
+  /* Style for Select Options */
+  .cancel-select option {
+    background-color: #fff;
+    color: #333;
+  }
+  
+  /* Style for Select on Hover/Focus */
+  .cancel-select:hover,
+  .cancel-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+
+
+  .cancel-box-button {
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #8f6ec5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .cancel-box-button:hover {
+    background-color: #682e7e;
+  }
+  
+  /* Optional: Add transition for a smooth hover effect */
+  .cancel-box-button {
+    transition: background-color 0.3s ease;
+  }
+
+  .cancel-box-button.cancel{
+    background-color: #f44336;
+  }
+
+  .cancel-box-button.cancel:hover{
+    background-color: #d32f2f;
+  }
+
+  .cancel-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    resize: none; /* Disable textarea resizing */
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .btn_bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px
+  }
+
+
+  .assigned-box-content{
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}

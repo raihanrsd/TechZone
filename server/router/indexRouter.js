@@ -65,4 +65,14 @@ router.use('/get_order', require('./Orders/order'));
 
 router.use('/tracker', require('./Orders/tracker'));
 
+router.use('/notifications', require('./User/notification'));
+
+router.use('/review', require('./User/review'));
+
+router.use('/qa', require('./User/qa'));
+
+router.use('/delivery_man', require('./DeliveryMan/delivery_man_info'))
+
+router.use('/DMorders', require('./DeliveryMan/delivery_man_orders'))
+
 module.exports = router;

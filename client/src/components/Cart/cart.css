@@ -1,0 +1,21 @@
+.update-spec-overlay {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+}
+
+.update-spec-container {
+    min-width: 700px;
+    min-height: 300px;
+    text-align: center; /* If you want to center text within the container */
+    background-color: white; /* Add a background color for better visibility */
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+    padding: 20px; /* Add padding to the container */
+    border-radius: 15px; /* Optional: Add rounded corners */
+}
