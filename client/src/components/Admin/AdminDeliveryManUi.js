@@ -68,6 +68,7 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
     }
 
     const logOut = async() =>{
+        localStorage.removeItem("token");
         setAuth(false);
         setIsAdmin(false);
         setIsDeliveryMan(false);
@@ -185,7 +186,7 @@ const AdminDeliveryManUi = ({isAdmin, isDeliveryMan, setAuth, setIsAdmin, setIsD
 
 {
                         isDeliveryMan && (
-                            pageState === 1 && <AdminAnalytics /> ||
+                            pageState === 1 && <DMAnalytics /> ||
                             pageState === 2 && <AvailableOrders /> ||
                             pageState === 3 && <AssignedOrders /> ||
                             pageState === 4 && <CompletedOrders /> ||

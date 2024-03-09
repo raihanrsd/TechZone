@@ -27,7 +27,7 @@ function ChunkpageProducts(array, size){
     return pageArr;
 }
 
-export default function Product({ isAuthenticated, props }) { // array of products
+export default function Product({ isAuthenticated, props, setCartCounter }) { // array of products
     // console.log(props);
     console.log(isAuthenticated);
     const [currentPage, setCurrentPage] = useState(1);
@@ -61,21 +61,22 @@ export default function Product({ isAuthenticated, props }) { // array of produc
     return (
         <Fragment>
             <div className="product-box-container">
-               
+               <div className='product-box-inner-div'>
                 <div className="product-box">
                     {pageProduct && pageProduct[currentPage - 1] && chunkArray(pageProduct[currentPage - 1], 4).map((row, index) =>  (
-                        <div key={index} className="row">
-                            {row.map(item => (
-                                <div key={item.id} className='col-md-3' >
-                                    <Card key={item.id} item={item}  />
-                                </div>
-                            ))}
-                        </div>
+                        
+                            row.map(item => (
+                                
+                                <Card key={item.id} item={item} setCartCounter={setCartCounter}  />
+                                
+                            ))
+                        
                     ))}
+                </div>
                 </div>
                
 
-                <div className='pageination-container'>
+                <div className='pagination-container'>
                     <ul className="pagination">
                         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                             <a onClick={handlePreviousClick} className="page-link" href="#">

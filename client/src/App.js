@@ -122,7 +122,7 @@ function App() {
           {/* <Route exact path="/" element={<Navigate to="/login"/>} /> */}
           <Route exact path="/admin" element={<AddPage />}/>
           <Route exact path="/error" element={<ErrorPage />}/>
-          <Route exact path="/filter" element={<FilterPage isAuthenticated={isAuthenticated} Category={''}/>}/>
+          <Route exact path="/filter" element={<FilterPage isAuthenticated={isAuthenticated} Category={''} setCartCounter={setCartCounter} />}/>
           <Route exact path="/order/:order_id" element={isAuthenticated?  <OrderPage isAuthenticated={isAuthenticated} /> : <Navigate to ="/login" />} />
           <Route exact path="/techProducts" element={<TechProduct isAuthenticated={isAuthenticated} setCartCounter={setCartCounter} />}/>       
           <Route exact path="/product/:id" element={<Product isAuthenticated={isAuthenticated} isAdmin={isAdmin} hideNavBar={hideNavBar} setHideNavBar={hideNavBar}  />}/>

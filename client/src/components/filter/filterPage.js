@@ -10,7 +10,7 @@ import PageFooter from "../ReUse/PageFooter";
 
 import "./filter-css/filterPage.css";
 
-export default function FilterPage({ isAuthenticated, Category }) {
+export default function FilterPage({ isAuthenticated, Category, setCartCounter }) {
   console.log("FilterPage hello");
 
   const [products, setProducts] = useState([]);
@@ -66,7 +66,7 @@ export default function FilterPage({ isAuthenticated, Category }) {
             sortBy={sortBy}
             sortOrder={sortOrder}
         />
-        <Product isAuthenticated={isAuthenticated} props={products} />
+        <Product isAuthenticated={isAuthenticated} props={products} setCartCounter={setCartCounter} />
       </div>
       <PageFooter />
     </Fragment>

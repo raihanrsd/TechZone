@@ -27,6 +27,8 @@ const OrderPage = ({ isAuthenticated }) => {
     reasonText: "",
   });
 
+  const [current_user, setCurrentUser] = useState({});
+
   function formatDateString(originalDateString) {
     const originalDate = new Date(originalDateString);
   
@@ -65,6 +67,7 @@ const OrderPage = ({ isAuthenticated }) => {
         setTracker(parseRes.tracker);
         setUser(parseRes.user);
         setAssignedUser(parseRes.assigned_user);
+        setCurrentUser(parseRes.current_user);
         if(parseRes.order.order_status === 'Cancelled'){
           const orderReason = JSON.parse(parseRes.order.reason_for_cancellation);
           setReason({
@@ -111,9 +114,9 @@ const OrderPage = ({ isAuthenticated }) => {
             {tracker &&
               <Link to={`/tracker/${tracker.tracker_id}`}> <button className="btn btn-primary order-button tracker">Tracker</button></Link>
             }
-            { order.order_status !== 'Cancelled' ?
+            { (current_user.username === user.username || current_user.staff_status === 'admin' )  &&( order.order_status !== 'Cancelled' ?
               <button className="btn btn-outline-danger order-button cancel" onClick={() => setCancelOrder(true)}>Cancel Order</button> :
-              <button className="btn btn-outline-danger order-button cancel" onClick={() => setShowReasonBox(true)}>Cancellation Reason</button>
+              <button className="btn btn-outline-danger order-button cancel" onClick={() => setShowReasonBox(true)}>Cancellation Reason</button>)
             }
 
             

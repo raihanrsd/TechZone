@@ -46,12 +46,7 @@ const ShowProducts = ({isAuthenticated, products, setProducts, setCartCounter}) 
             const specs = parseRes;
             // console.log("comes here");
             addToCart(id, 1, specs);
-            setProducts(products.map(product => {
-                if(product.id === id){
-                    product.wishlist = true;
-                }
-                return product;
-            }))
+
             toast.success("Product added to cart successfully");
             setCartCounter(getTotalItems());
         }

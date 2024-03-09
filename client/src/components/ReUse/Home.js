@@ -35,7 +35,7 @@ export default function Home({isAuthenticated, setAuth, hideNavBar, setHideNavBa
   useEffect(() =>{
     const getFeaturedProduct = async() =>{
         try{
-            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/featured_product/price/${number}`,{
+            const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/featured_product/${number}`,{
                 method: "GET",
                 headers: {token: localStorage.token}
             });
@@ -54,10 +54,10 @@ export default function Home({isAuthenticated, setAuth, hideNavBar, setHideNavBa
 const handleClick = (category) => {
   console.log(category);
 }
-  const navigate = useNavigate();
+  const navigate1 = useNavigate();
 
     const handleDiscoverClick = () => {
-        navigate('/filter');
+        navigate1('/filter');
     }; 
   return (
     <Fragment>

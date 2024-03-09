@@ -268,6 +268,49 @@ const Product = ({ isAuthenticated, isAdmin }) => {
     }
   } 
 
+  const addProductToWishlist = async (id) => {
+    try{
+        const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/wishlist/${id}`, {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    token: localStorage.token 
+                }
+            });
+        const parseRes = await response.json();
+        console.log(parseRes);
+        setProduct({
+            ...product,
+            wishlist: true
+        })
+        toast.success("Product added to wishlist successfully");
+    }catch(err){
+        toast.error(err.message);
+    }
+}
+
+const removeProductFromWishlist = async (id) => {
+    try{
+        const response = await fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/wishlist/${id}`, {
+                method: "DELETE",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    token: localStorage.token 
+                }
+            });
+        const parseRes = await response.json();
+        console.log(parseRes);
+        
+        setProduct({
+            ...product,
+            wishlist: false
+        })
+        toast.success("Product removed from wishlist successfully");
+    }catch(err){
+        toast.error(err.message);
+    }
+}
+
   return (
     <Fragment>
       <div className="product-main-div">
@@ -284,7 +327,7 @@ const Product = ({ isAuthenticated, isAdmin }) => {
               }}
             >
               <Slider {...settings}>
-                {product.images &&
+                {product.images.length > 0?
                   product.images.map((image, index) => (
                     <div key={index} className="slider-image-container">
                       <img
@@ -295,7 +338,14 @@ const Product = ({ isAuthenticated, isAdmin }) => {
                         className="slider-image"
                       />
                     </div>
-                  ))}
+                  )):
+                  product.category_img ? (
+                    <img className="slider-image" src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}/images/categories/` + product.category_img} alt="Card image" style={{ height: '10rem', borderRadius: '10'}} />
+                  ): (
+                    <img src="/images/Product/test.png" className="slider-image" alt="..." />
+                  )
+                
+                }
               </Slider>
             </div>
             <div className="product-info-div">
@@ -338,6 +388,20 @@ const Product = ({ isAuthenticated, isAdmin }) => {
                   </p>
                 );
               })} */}
+
+              <div className="btn_bar" style={{
+                justifyContent: 'flex-start'
+              }}>
+                <button className='btn btn-primary' onClick={() => addToCartFunc(product.id, selectedSpecs)}>Add to Cart</button>
+                {
+                                            isAuthenticated ? product.wishlist? (
+                                                <button className="btn btn-danger" onClick={() => removeProductFromWishlist(product.id)}>Remove WishList</button>
+                                            ) : (
+                                                <button className="btn btn-light" onClick={() => addProductToWishlist(product.id)}>Add to Wishlist</button>
+                                            )
+                                            : null
+                                        }
+              </div>
 
             
             </div>

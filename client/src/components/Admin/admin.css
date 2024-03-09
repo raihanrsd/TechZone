@@ -260,3 +260,47 @@
   .cancel-box-button:hover {
     background-color: #682e7e;
   }
+
+
+
+
+  .product-sold-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-sold-box{
+    width: 300px;
+    height: 300px;
+    border-radius: 50px;
+    margin-right: 20px;
+    background: linear-gradient(to right, #8f6ec5, #682e7e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    color: white;
+  }
+
+  .product-sold-box p{
+    font-size: 70px;
+  }
+
+  .product-sold-box h2{
+    font-size: 20px;
+  }
+
+  .order-analytics-div{
+    margin-top: 50px;
+  }
+
+
+  .order-sold-div{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 100px;
+    text-align: center;
+  }
