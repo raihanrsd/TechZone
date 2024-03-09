@@ -31,6 +31,7 @@ const fs = require('fs');
 app.use(cors());
 app.use(express.json());
 app.use('/images/products', express.static(path.join(__dirname, 'public/images/products')));
+app.use('/images/categories', express.static(path.join(__dirname, 'public/images/categories')));
 // app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 

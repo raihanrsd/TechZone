@@ -212,3 +212,115 @@ FROM order_delivery_man WHERE order_id = 71);
 
 SELECT O.*, OP.* FROM orders O JOIN order_product OP ON O.order_id = OP.order_id
 WHERE O.order_time BETWEEN '2024-01-01' AND '2024-12-31';
+
+
+
+
+-- best selling product
+
+WITH RankedProducts AS (
+  SELECT
+    p.id AS product_id,
+    p.product_name,
+    pa.attribute_name,
+    MAX(pa.sold) AS max_sold,
+    ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY MAX(pa.sold) DESC) AS rnk
+  FROM
+    product p
+    JOIN product_attribute pa ON p.id = pa.product_id
+  GROUP BY
+    p.id, p.product_name, pa.attribute_name
+)
+SELECT
+  product_id,
+  product_name,
+  attribute_name,
+  max_sold
+FROM
+  RankedProducts
+WHERE
+  rnk = 1
+ORDER BY
+  max_sold DESC
+LIMIT 10;
+
+
+
+-- top wishlisted products
+WITH WishListCounts AS (
+    SELECT
+        product_id,
+        COUNT(*) AS wish_count
+    FROM
+        wishlist
+    GROUP BY
+        product_id
+)
+
+SELECT
+    p.id AS product_id,
+    p.product_name,
+    COALESCE(wc.wish_count, 0) AS wish_count
+FROM
+    product p
+LEFT JOIN
+    WishListCounts wc ON p.id = wc.product_id
+ORDER BY
+    COALESCE(wc.wish_count, 0) DESC
+LIMIT 10;
+
+
+
+-- top rated products
+WITH AvgRatings AS (
+    SELECT
+        p.id AS product_id,
+        p.product_name,
+        AVG(pr.rating) AS avg_rating
+    FROM
+        product p
+    LEFT JOIN
+        product_review pr ON p.id = pr.product_id
+    GROUP BY
+        p.id, p.product_name
+)
+
+SELECT
+    product_id,
+    product_name,
+    COALESCE(avg_rating, 0) AS avg_rating
+FROM
+    AvgRatings
+ORDER BY
+    COALESCE(avg_rating, 0) DESC
+LIMIT 10;
+
+
+
+
+-- most valuable user
+SELECT
+    u.user_id,
+    u.username,
+    u.email,
+    u.full_name,
+    SUM(o.total_price) AS cumulative_value
+FROM
+    general_user u
+JOIN
+    orders o ON u.user_id = o.user_id
+GROUP BY
+    u.user_id, u.username, u.email, u.full_name
+ORDER BY
+    cumulative_value DESC
+LIMIT 10;
+
+
+-- most active user
+
+SELECT cu.user_id, gu.username, cu.points
+FROM customer cu
+JOIN general_user gu ON cu.user_id = gu.user_id
+ORDER BY cu.points DESC
+LIMIT 10;
+

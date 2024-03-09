@@ -80,14 +80,14 @@ router.get('/', async(req, res, next) => {
 
         const sql = 
         `  
-        select pr.*, pc.category_name, pc2.category_name AS "Parent_Category"
+        select pr.*, pc.category_name, pc.category_img, pc2.category_name AS "Parent_Category"
         from product pr join product_category pc on pr.category_id = pc.category_id
                         join product_category pc2 on pc.parent_category_id = pc2.category_id
         where pc2.category_name in (${placeholders}) and lower(pr.PRODUCT_NAME) LIKE $${parm.length + 1} 
         
         intersect
 
-        select pr.*, pc.category_name, pc2.category_name AS "Parent_Category"
+        select pr.*, pc.category_name, pc.category_img,  pc2.category_name AS "Parent_Category"
         from product pr join product_category pc on pr.category_id = pc.category_id
         join product_category pc2 on pc.parent_category_id = pc2.category_id
         where pr.price >= $${parm.length + 2} and pr.price <= $${parm.length + 3}

@@ -15,7 +15,9 @@ router.get('/', async(req, res, next) => {
                     FROM product_category pc1
                     WHERE pc1.category_id = (	select parent_category_id 
                                                 from product_category pc2  
-                                                WHERE pc2.category_id = PR.category_id)) AS "Parent_Category"
+                                                WHERE pc2.category_id = PR.category_id)) AS "Parent_Category", (
+                    SELECT category_img From product_category WHERE category_id = PR.category_id
+                                                ) AS "category_img"
         FROM product PR 
         ORDER BY PR.id;` // added parent category
 
@@ -28,6 +30,12 @@ router.get('/', async(req, res, next) => {
                 product.discount = parseFloat(product.discount);
                 const specs_query = await pool.query('SELECT * FROM product_attribute WHERE product_id = $1;', [product.id]);
                 product.specs = specs_query.rows;
+                const category_img = await pool.query(`
+                    SELECT category_img from product_category WHERE category_id = (
+                        SELECT category_id from product WHERE id = $1
+                    );
+                `, [product.id]);
+                product.category_img = category_img.rows[0].category_img;
                 return product;
             })
         );
@@ -39,6 +47,8 @@ router.get('/', async(req, res, next) => {
                 return product;
             })
         );
+
+
 
         // wishlisting for logged in users
         const jwtToken = req.header("token")

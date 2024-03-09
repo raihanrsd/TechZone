@@ -9,26 +9,35 @@ router.get('/:number', async(req, res, next) => {
         const number = parseInt(req.params.number);
         // console.log(number);
         const sql = `
-        WITH product_sell AS(
-            WITH max_s AS(
-                SELECT
-                    product_id,
-                    SUM(sold) AS total_sold
-                FROM product_attribute
-                GROUP BY product_id, attribute_name
-            )
-            
-            SELECT P.id AS id, COALESCE(MAX(total_sold), 0) AS max_total_sold
-            FROM product P
-            LEFT JOIN max_s AS A ON P.id = A.product_id
-            GROUP BY P.id
-            )
-            
-            SELECT * FROM product WHERE id IN(
-            SELECT P1.id from product_sell P1
-            LEFT JOIN product_sell P2 ON P1.max_total_sold < P2.max_total_sold
-            GROUP BY P1.id
-            HAVING COUNT(DISTINCT P2.id) < ${number})
+        WITH RankedProducts AS (
+            SELECT
+              p.product_id,
+              p.product_name,
+              pa.attribute_name,
+              MAX(pa.attribute_value) AS max_attribute_value,
+              ROW_NUMBER() OVER (PARTITION BY p.product_id ORDER BY MAX(pa.attribute_value) DESC) AS rnk
+            FROM
+              product p
+              JOIN order_product op ON p.product_id = op.product_id
+              JOIN orders o ON op.order_id = o.order_id
+              JOIN product_attributes pa ON p.product_id = pa.product_id
+            WHERE
+              o.order_status = 'Delivered'
+            GROUP BY
+              p.product_id, p.product_name, pa.attribute_name
+          )
+          SELECT
+            product_id,
+            product_name,
+            attribute_name,
+            max_attribute_value
+          FROM
+            RankedProducts
+          WHERE
+            rnk = 1
+          ORDER BY
+            max_attribute_value DESC
+          LIMIT< ${number};)
         `
 
 

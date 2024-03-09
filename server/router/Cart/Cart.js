@@ -28,8 +28,8 @@ router.post("/:id", async (req, res, next) => {
       "SELECT * FROM product_attribute WHERE product_id = $1 AND base_spec ORDER BY attribute_name;",
       [req.params.id]
     );
-
     res.json(specs.rows);
+    
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");

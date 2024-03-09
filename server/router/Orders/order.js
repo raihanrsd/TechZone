@@ -46,6 +46,7 @@ router.get('/:id', authorization, async (req, res) => {
 
             
             const tracker = await pool.query('SELECT * FROM tracker WHERE order_id = $1', [id]);
+            const current_user = user;
             user = await pool.query('SELECT * FROM general_user WHERE user_id = $1', [order.rows[0].user_id]);
             
             const assigned_user = await pool.query(`SELECT * FROM general_user WHERE user_id = (
@@ -60,7 +61,8 @@ router.get('/:id', authorization, async (req, res) => {
                 tracker: tracker? tracker.rows[0]: null,
                 message: 'Order Found',
                 isAuthorized: true,
-                assigned_user: assigned_user.rows[0] ? assigned_user.rows[0]: null
+                assigned_user: assigned_user.rows[0] ? assigned_user.rows[0]: null,
+                current_user: current_user.rows[0]
             });
         }
         else{

@@ -219,6 +219,212 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE OR REPLACE FUNCTION get_order_count(start_date DATE, end_date DATE)
+RETURNS TABLE (date_ordered DATE, total_orders BIGINT) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT
+        d::DATE AS date_ordered,
+        COUNT(o.order_id) AS total_orders
+    FROM
+        generate_series(start_date, end_date, interval '1 day') d
+    LEFT JOIN
+        orders o ON d::DATE = o.date_added
+    GROUP BY
+        d::DATE
+    ORDER BY
+        d::DATE;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+
+-- tracker 7
+CREATE OR REPLACE FUNCTION order_user_points()
+RETURNS TRIGGER AS $$
+DECLARE
+    userId uuid;
+    userStatus TEXT;
+
+BEGIN
+    SELECT user_id INTO userId FROM orders where order_id = NEW.order_id;
+    SELECT staff_status INTO userStatus FROM general_user WHERE user_id = userId;
+    IF userStatus = 'customer' THEN 
+        UPDATE CUSTOMER SET points = (points + 100 + NEW.total_price / 1000) WHERE user_id = userId;
+
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to call the function after an insert on the orders table
+CREATE TRIGGER orders_user_points
+AFTER INSERT ON orders
+FOR EACH ROW
+EXECUTE FUNCTION order_user_points();
+
+
+-- PROCEDURE 4
+
+
+
+-- Create or replace the procedure
+CREATE OR REPLACE PROCEDURE insert_100_customers()
+AS $$
+DECLARE
+    i INTEGER;
+BEGIN
+    FOR i IN 44..100 LOOP
+        INSERT INTO general_user(username, email, contact_no, password, profile_img, full_name, gender, staff_status)
+        VALUES (
+            'customer' || i,
+            'customer' || i || '@gmail.com', 
+            '+1256789' || LPAD(i::TEXT, 3, '0'),  -- Cast i to TEXT before using LPAD
+            '$2b$10$QdD.Og0aIyNgxZ6copAEIeOl9aWdr/2gn3CVkmCCtsilZxigwUR4W',
+            'user.png',
+            'raihan rsd ' || i,
+            'male',
+            'customer'
+        );
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+-- trigger 8
+CREATE OR REPLACE FUNCTION review_user_points()
+RETURNS TRIGGER AS $$
+DECLARE
+    userId uuid;
+    userStatus TEXT;
+BEGIN
+    SELECT user_id INTO userId FROM product_review where review_id = NEW.review_id;
+    SELECT staff_status INTO userStatus FROM general_user WHERE user_id = userId;
+    IF userStatus = 'customer' THEN 
+        UPDATE CUSTOMER SET points = (points + 100 + NEW.rating * 10) WHERE user_id = userId;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER review_user_points
+AFTER INSERT ON product_review
+FOR EACH ROW
+EXECUTE FUNCTION review_user_points();
+
+
+-- trigger 9
+CREATE OR REPLACE FUNCTION qa_user_points()
+RETURNS TRIGGER AS $$
+DECLARE
+    userId uuid;
+    userStatus TEXT;
+BEGIN
+    SELECT user_id INTO userId FROM product_qa where question_id = NEW.question_id;
+    SELECT staff_status INTO userStatus FROM general_user WHERE user_id = userId;
+    IF userStatus = 'customer' THEN 
+        UPDATE CUSTOMER SET points = (points + 100) WHERE user_id = userId;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER qa_user_points
+AFTER INSERT ON product_qa
+FOR EACH ROW
+EXECUTE FUNCTION qa_user_points();
+
+
+
+
+-- adding product review
+
+-- procedure 5
+
+CREATE OR REPLACE PROCEDURE add_reviews_to_products()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    product_id_val INTEGER;
+    customer_username_val VARCHAR(200);
+    rating_val INTEGER;
+    review_text_val VARCHAR(200);
+    i INTEGER;
+BEGIN
+    FOR product_id_val IN (SELECT id FROM product)
+    LOOP
+        FOR i IN 1..5
+        LOOP
+            -- Select a random customer username
+            customer_username_val := 'customer' || (1 + floor(random() * 100));
+
+            -- Ensure the selected username is in the expected pattern
+            IF position('customer' IN customer_username_val) = 1 THEN
+                -- Select a random rating between 0 and 5
+                rating_val := floor(random() * 6);
+
+                -- Generate a random review text
+                review_text_val := 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+
+                -- Fetch user_id for the selected username
+                DECLARE
+                    user_id_val uuid;
+                BEGIN
+                    SELECT user_id INTO user_id_val
+                    FROM general_user
+                    WHERE username = customer_username_val
+                    LIMIT 1;
+
+                    -- Check if user_id is not null before inserting into product_review
+                    IF user_id_val IS NOT NULL THEN
+                        -- Insert the review into product_review table
+                        INSERT INTO product_review(user_id, product_id, review, rating, time_added)
+                        VALUES (
+                            user_id_val,
+                            product_id_val,
+                            review_text_val,
+                            rating_val,
+                            CURRENT_TIMESTAMP
+                        );
+                    END IF;
+                END;
+            END IF;
+        END LOOP;
+    END LOOP;
+END;
+$$;
+
+
+-- Function 3
+CREATE OR REPLACE FUNCTION get_cumulative_earned_amount(start_date DATE, end_date DATE)
+RETURNS TABLE (date_sold DATE, cumulative_earned_amount DECIMAL) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT
+        d::DATE AS date_sold,
+        COALESCE(SUM(op.price * op.quantity) OVER (ORDER BY d::DATE), 0) AS cumulative_earned_amount
+    FROM
+        generate_series(start_date, end_date, interval '1 day') d
+    LEFT JOIN
+        orders o ON d::DATE = o.date_added
+    LEFT JOIN
+        order_product op ON o.order_id = op.order_id
+    GROUP BY
+        d::DATE
+    ORDER BY
+        d::DATE;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM get_cumulative_earned_amount('2024-03-01'::DATE, '2024-03-10'::DATE);
 
 
 
